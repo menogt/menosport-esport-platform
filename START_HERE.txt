@@ -1,0 +1,43 @@
+START HERE
+==========
+
+This is a React + Vite project. Do NOT open index.html directly.
+
+To run on Windows:
+1. Extract the zip.
+2. Double-click RUN_WINDOWS.bat.
+3. Open the localhost URL shown in the terminal.
+
+Manual run:
+
+npm install
+npm run dev
+
+Main completed routes:
+
+/
+/tournaments
+/brackets/trn1
+/matches/m6
+/teams
+/games
+/media
+/live
+/community
+/integrations
+/sponsors
+/store
+/dashboard/player
+/dashboard/team
+/dashboard/admin
+
+Roadmap status:
+All documented phases from Phase 0 to Phase 14 are now covered in this frontend/product prototype.
+
+Important:
+Real deployment, real Supabase, real Stripe, real Discord, and real Twitch credentials are not included because those require external accounts and secret keys.
+
+Read these next:
+- ROADMAP_PHASE_STATUS.md
+- NEXT_ENGINEERING_STEPS.md
+- FINAL_HANDOFF_REPORT.md
