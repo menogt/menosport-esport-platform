@@ -43,7 +43,7 @@ const PRESET_EVENTS: Record<'bracket' | 'dispute' | 'stream' | 'discord', Omit<R
   stream: {
     type: 'match',
     title: 'Featured stream went live',
-    message: 'ArenaXOfficial is now broadcasting SEA Championship S4 semifinals.',
+    message: 'MenoArenaOfficial is now broadcasting SEA Championship S4 semifinals.',
     tournamentId: 'trn1',
     severity: 'info',
   },

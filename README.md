@@ -15,7 +15,7 @@ Windows users can also double-click `RUN_WINDOWS.bat` after extracting the zip.
 
 ---
 
-# ArenaX Esports Tournament Platform
+# Meno Arena Esports Tournament Platform
 
 A premium dark-mode React/Vite esports tournament platform with role-based dashboards, team/tournament flows, bracket views, match reporting, dispute handling, sandbox payments, and prize-pool tracking.
 

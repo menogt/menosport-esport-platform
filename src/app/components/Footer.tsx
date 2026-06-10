@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
-import { Swords, Twitter, Twitch, Youtube, MessageSquare } from 'lucide-react';
+import { Twitter, Twitch, Youtube, MessageSquare } from 'lucide-react';
+import menoArenaMark from '../../assets/brand/meno-arena-mark-web.png';
 
 const LINKS = {
   Platform: [
@@ -35,13 +36,12 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', boxShadow: '0 0 16px rgba(0,212,255,0.3)' }}>
-                <Swords className="w-4 h-4 text-white" />
+            <Link to="/" className="flex items-center gap-2.5 mb-4" aria-label="Meno Arena home">
+              <div className="w-9 h-9 flex items-center justify-center">
+                <img src={menoArenaMark} alt="" className="h-9 w-9 object-contain drop-shadow-[0_0_14px_rgba(255,70,85,0.45)]" />
               </div>
               <span className="text-white" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.1rem', fontWeight: 700, letterSpacing: '0.05em' }}>
-                ARENA<span style={{ color: '#00d4ff' }}>X</span>
+                Meno <span style={{ color: '#ff4655' }}>Arena</span>
               </span>
             </Link>
             <p className="text-xs text-white/40 leading-relaxed mb-4">
@@ -75,7 +75,7 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4"
           style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-          <p className="text-xs text-white/30">© 2026 ArenaX. All rights reserved.</p>
+          <p className="text-xs text-white/30">© 2026 Meno Arena. All rights reserved.</p>
           <div className="flex gap-6 text-xs text-white/30">
             <a href="#" className="hover:text-white/60 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white/60 transition-colors">Terms of Service</a>

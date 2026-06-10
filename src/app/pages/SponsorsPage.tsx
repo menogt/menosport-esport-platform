@@ -38,7 +38,7 @@ export function SponsorsPage() {
                 Sponsor tournaments without making the platform feel spammy.
               </h1>
               <p className="text-white/55 mt-5 max-w-2xl leading-relaxed">
-                ArenaX now has sponsor packages, campaign cards, placement tracking, and analytics-ready UI blocks for tournament partners, game hubs, brackets, and media highlights.
+                Meno Arena now has sponsor packages, campaign cards, placement tracking, and analytics-ready UI blocks for tournament partners, game hubs, brackets, and media highlights.
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
                 <Link to="/dashboard/admin" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm text-white" style={{ background: 'linear-gradient(135deg, #00d4ff, #0066ff)', fontWeight: 700 }}>

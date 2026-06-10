@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
 import { motion } from 'motion/react';
-import { Swords, Eye, EyeOff, LogIn, Chrome, MessageSquare, AlertCircle, Loader } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Chrome, MessageSquare, AlertCircle, Loader } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import menoArenaMark from '../../assets/brand/meno-arena-mark-web.png';
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -58,13 +59,12 @@ export function LoginPage() {
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
         className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', boxShadow: '0 0 20px rgba(0,212,255,0.3)' }}>
-              <Swords className="w-5 h-5 text-white" />
+          <Link to="/" className="inline-flex items-center gap-2.5 mb-6" aria-label="Meno Arena home">
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src={menoArenaMark} alt="" className="h-10 w-10 object-contain drop-shadow-[0_0_18px_rgba(255,70,85,0.55)]" />
             </div>
             <span className="text-white" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.3rem', fontWeight: 700, letterSpacing: '0.05em' }}>
-              ARENA<span style={{ color: '#00d4ff' }}>X</span>
+              Meno <span style={{ color: '#ff4655' }}>Arena</span>
             </span>
           </Link>
           <h1 className="text-white mb-1" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.8rem', fontWeight: 700 }}>Welcome back</h1>

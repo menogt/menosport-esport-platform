@@ -59,7 +59,7 @@ export function MediaPage() {
             <h1 className="font-black text-white mb-3" style={{ fontFamily: 'Rajdhani', fontSize: 'clamp(2.5rem,6vw,4rem)' }}>
               CLIPS & <span style={{ color: '#a855f7' }}>HIGHLIGHTS</span>
             </h1>
-            <p className="text-white/50 max-w-xl mx-auto">The best moments from every tournament, match, and player on ArenaX.</p>
+            <p className="text-white/50 max-w-xl mx-auto">The best moments from every tournament, match, and player on Meno Arena.</p>
           </motion.div>
         </div>
       </section>

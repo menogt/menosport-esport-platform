@@ -580,7 +580,7 @@ export const GAME_HUB_DATA: Record<string, {
   mlbb: {
     slug: 'mobile-legends',
     banner: 'from-cyan-600 via-blue-700 to-indigo-900',
-    description: 'The biggest mobile MOBA in Southeast Asia. Build your team, master your hero, dominate the ranked ladder and rise through ArenaX tournaments.',
+    description: 'The biggest mobile MOBA in Southeast Asia. Build your team, master your hero, dominate the ranked ladder and rise through Meno Arena tournaments.',
     topPlayers: [
       { name: 'ShadowFang', team: 'Phantom Ascent', stat: '5.2', statLabel: 'KDA', avatar: 'SF' },
       { name: 'NeonStrike', team: 'Phantom Ascent', stat: '6.1', statLabel: 'KDA', avatar: 'NS' },
@@ -596,7 +596,7 @@ export const GAME_HUB_DATA: Record<string, {
   valorant: {
     slug: 'valorant',
     banner: 'from-red-600 via-rose-700 to-pink-900',
-    description: 'Precise gunplay meets tactical agent abilities. Compete in ArenaX\'s ranked Valorant tournaments and prove your aim at the highest level.',
+    description: 'Precise gunplay meets tactical agent abilities. Compete in Meno Arena\'s ranked Valorant tournaments and prove your aim at the highest level.',
     topPlayers: [
       { name: 'FrostBite', team: 'Neon Wolves', stat: '3.1', statLabel: 'KDA', avatar: 'FB' },
       { name: 'PixelGhost', team: 'Neon Wolves', stat: '2.8', statLabel: 'KDA', avatar: 'PG' },
@@ -625,7 +625,7 @@ export const GAME_HUB_DATA: Record<string, {
   codm: {
     slug: 'cod-mobile',
     banner: 'from-green-600 via-emerald-700 to-teal-900',
-    description: 'Console-quality FPS on mobile. Master gunfights, coordinate your squad, and compete in ArenaX\'s Call of Duty: Mobile seasonal leagues.',
+    description: 'Console-quality FPS on mobile. Master gunfights, coordinate your squad, and compete in Meno Arena\'s Call of Duty: Mobile seasonal leagues.',
     topPlayers: [
       { name: 'ArcLight', team: 'Cipher Squad', stat: '4.2', statLabel: 'K/D', avatar: 'AL' },
       { name: 'DawnRift', team: 'Iron Vanguard', stat: '3.8', statLabel: 'K/D', avatar: 'DR' },
@@ -757,7 +757,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
   { id: 'cp1', author: 'ProCircuit PH', avatar: 'PP', role: 'Organizer', game: 'mlbb', title: 'SEA Championship check-in reminder', body: 'Captains must lock lineups before check-in closes. Late roster swaps will need admin approval.', likes: 420, replies: 38, tag: 'announcement', createdAt: '15m ago' },
   { id: 'cp2', author: 'Neon Wolves', avatar: 'NW', role: 'Team', game: 'valorant', title: 'Looking for a sentinel substitute', body: 'Need one Immortal+ sentinel for APAC scrim block. Drop tracker and availability.', likes: 120, replies: 24, tag: 'recruitment', createdAt: '42m ago' },
   { id: 'cp3', author: 'ShadowFang', avatar: 'SF', role: 'Player', game: 'mlbb', title: 'Fanny cable steal breakdown', body: 'Posted a short breakdown of the turtle steal timing. The key was watching roamer cooldowns, not just mechanics.', likes: 980, replies: 91, tag: 'highlight', createdAt: '1h ago' },
-  { id: 'cp4', author: 'ArenaX Mods', avatar: 'AX', role: 'Admin', game: 'codm', title: 'CODM Iron Cup dispute policy update', body: 'From today, final round screenshots must include scoreboard and timestamp to speed up reviews.', likes: 260, replies: 18, tag: 'announcement', createdAt: '2h ago' },
+  { id: 'cp4', author: 'Meno Arena Mods', avatar: 'MA', role: 'Admin', game: 'codm', title: 'CODM Iron Cup dispute policy update', body: 'From today, final round screenshots must include scoreboard and timestamp to speed up reviews.', likes: 260, replies: 18, tag: 'announcement', createdAt: '2h ago' },
 ];
 
 export const COMMUNITY_EVENTS: CommunityEvent[] = [
@@ -805,7 +805,7 @@ export const DISCORD_WEBHOOKS: DiscordWebhookConfig[] = [
 ];
 
 export const TWITCH_STREAMS: TwitchStreamConfig[] = [
-  { id: 'tw1', channelName: 'ArenaXOfficial', tournamentId: 'trn1', title: 'SEA Championship S4 — Semifinals', status: 'live', viewers: 18420, startsAt: '2026-06-09T18:00:00' },
+  { id: 'tw1', channelName: 'MenoArenaOfficial', tournamentId: 'trn1', title: 'SEA Championship S4 — Semifinals', status: 'live', viewers: 18420, startsAt: '2026-06-09T18:00:00' },
   { id: 'tw2', channelName: 'VCT_APAC', tournamentId: 'trn2', title: 'Valorant Pro League Draft Show', status: 'scheduled', viewers: 0, startsAt: '2026-06-11T20:00:00' },
   { id: 'tw3', channelName: 'MobileMasters', tournamentId: 'trn5', title: 'MLBB Club Masters Replay Room', status: 'offline', viewers: 0, startsAt: '2026-06-08T17:00:00' },
 ];
@@ -813,7 +813,7 @@ export const TWITCH_STREAMS: TwitchStreamConfig[] = [
 export const INTEGRATION_LOGS: IntegrationLog[] = [
   { id: 'il1', provider: 'discord', action: 'Bracket published', status: 'success', message: 'Announcement delivered to #tournament-updates.', createdAt: '2026-06-09T20:20:00' },
   { id: 'il2', provider: 'discord', action: 'Match reminder', status: 'success', message: 'Reminder sent 30 minutes before semifinal.', createdAt: '2026-06-09T19:40:00' },
-  { id: 'il3', provider: 'twitch', action: 'Stream sync', status: 'success', message: 'Live viewer count refreshed for ArenaXOfficial.', createdAt: '2026-06-09T19:30:00' },
+  { id: 'il3', provider: 'twitch', action: 'Stream sync', status: 'success', message: 'Live viewer count refreshed for MenoArenaOfficial.', createdAt: '2026-06-09T19:30:00' },
   { id: 'il4', provider: 'discord', action: 'Role sync retry', status: 'warning', message: 'First attempt failed, retry succeeded after 18 seconds.', createdAt: '2026-06-09T18:50:00' },
 ];
 
@@ -917,13 +917,13 @@ export interface StoreOrder {
 }
 
 export const PRODUCTS: Product[] = [
-  { id: 'prd1', name: 'ArenaX Pro Jersey', category: 'jersey', price: 49, stock: 42, imageGradient: 'from-cyan-500 to-blue-700', badge: 'Best Seller', description: 'Lightweight tournament jersey with breathable esports fit.', sizes: ['S', 'M', 'L', 'XL'], featured: true },
+  { id: 'prd1', name: 'Meno Arena Pro Jersey', category: 'jersey', price: 49, stock: 42, imageGradient: 'from-cyan-500 to-blue-700', badge: 'Best Seller', description: 'Lightweight tournament jersey with breathable esports fit.', sizes: ['S', 'M', 'L', 'XL'], featured: true },
   { id: 'prd2', name: 'Phantom Ascent Team Jersey', category: 'jersey', price: 59, stock: 18, imageGradient: 'from-blue-600 to-indigo-800', badge: 'Team Drop', description: 'Official Phantom Ascent fan jersey for the SEA Championship run.', sizes: ['S', 'M', 'L'], featured: true },
   { id: 'prd3', name: 'Neon Wolves Hoodie', category: 'hoodie', price: 72, stock: 12, imageGradient: 'from-purple-600 to-pink-800', badge: 'Limited', description: 'Premium fleece hoodie with neon wolf crest and oversized streetwear cut.', sizes: ['M', 'L', 'XL'], featured: true },
-  { id: 'prd4', name: 'ArenaX Mousepad XL', category: 'accessory', price: 29, stock: 80, imageGradient: 'from-zinc-600 to-slate-900', badge: 'Gear', description: 'Large stitched mousepad for FPS and MOBA players.', featured: false },
+  { id: 'prd4', name: 'Meno Arena Mousepad XL', category: 'accessory', price: 29, stock: 80, imageGradient: 'from-zinc-600 to-slate-900', badge: 'Gear', description: 'Large stitched mousepad for FPS and MOBA players.', featured: false },
   { id: 'prd5', name: 'Digital Event Pass', category: 'event_pass', price: 9, stock: 500, imageGradient: 'from-yellow-500 to-orange-700', badge: 'Digital', description: 'Viewer pass with badge, prediction access, and community rewards.', featured: false },
   { id: 'prd6', name: 'Creator Overlay Pack', category: 'digital', price: 19, stock: 999, imageGradient: 'from-emerald-500 to-teal-700', badge: 'Download', description: 'Stream overlays, score bars, and tournament lower-thirds for creators.', featured: false },
-  { id: 'prd7', name: 'Champion Cap', category: 'accessory', price: 24, stock: 33, imageGradient: 'from-red-500 to-rose-800', badge: 'New', description: 'Minimal black cap with embroidered ArenaX champion mark.', featured: false },
+  { id: 'prd7', name: 'Champion Cap', category: 'accessory', price: 24, stock: 33, imageGradient: 'from-red-500 to-rose-800', badge: 'New', description: 'Minimal black cap with embroidered Meno Arena champion mark.', featured: false },
   { id: 'prd8', name: 'Grand Finals Poster Pack', category: 'digital', price: 7, stock: 999, imageGradient: 'from-violet-500 to-indigo-800', badge: 'Digital', description: 'High-resolution digital posters from the latest championship events.', featured: false },
 ];
 

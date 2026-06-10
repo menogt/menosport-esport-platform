@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Swords, Bell, Menu, X, ChevronDown, Trophy, Users, Gamepad2,
+  Bell, Menu, X, ChevronDown, Trophy, Users, Gamepad2,
   Film, Zap, LogOut, User, Plus, Radio, MessageCircle, ShoppingBag, Handshake
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useRealtime } from '../context/RealtimeContext';
+import menoArenaMark from '../../assets/brand/meno-arena-mark-web.png';
 
 const NAV_LINKS = [
   { label: 'Tournaments', href: '/tournaments', icon: Trophy },
@@ -76,14 +77,13 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', boxShadow: '0 0 20px rgba(0,212,255,0.4)' }}>
-              <Swords className="w-5 h-5 text-white" />
+          <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0" aria-label="Meno Arena home">
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src={menoArenaMark} alt="" className="h-10 w-10 object-contain drop-shadow-[0_0_18px_rgba(255,70,85,0.55)]" />
             </div>
             <span className="text-white hidden sm:block"
-              style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.25rem', fontWeight: 700, letterSpacing: '0.05em' }}>
-              ARENA<span style={{ color: '#00d4ff' }}>X</span>
+              style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.18rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Meno <span style={{ color: '#ff4655' }}>Arena</span>
             </span>
           </Link>
 
