@@ -1,4 +1,4 @@
-import { createVercelApiApp } from "../../../server/_core/app";
+import { createVercelApiApp } from "../../server/_core/app";
 
 const app = createVercelApiApp();
 
