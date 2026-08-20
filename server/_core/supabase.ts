@@ -5,12 +5,21 @@ import { getUserByOpenId, upsertUser } from "../db";
 const supabaseUrl = process.env.VITE_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? "";
 
-const supabase: SupabaseClient | null =
-  supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      })
-    : null;
+export function createOptionalSupabaseClient(url: string, key: string): SupabaseClient | null {
+  if (!url || !key) return null;
+
+  try {
+    new URL(url);
+    return createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  } catch (error) {
+    console.warn("[Supabase] Ignoring invalid server client configuration", error);
+    return null;
+  }
+}
+
+const supabase = createOptionalSupabaseClient(supabaseUrl, supabaseAnonKey);
 
 export async function authenticateSupabaseToken(token: string): Promise<User | null> {
   if (!supabase || !token) return null;

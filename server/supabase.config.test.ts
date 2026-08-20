@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { createOptionalSupabaseClient } from "./_core/supabase";
 
 describe("Supabase configuration", () => {
+  it("ignores malformed server URLs without throwing during module setup", () => {
+    expect(() => createOptionalSupabaseClient("not-a-url", "eyJtest")).not.toThrow();
+    expect(createOptionalSupabaseClient("not-a-url", "eyJtest")).toBeNull();
+  });
+
   it("accepts the configured project URL and anon key", async () => {
     const url = process.env.VITE_SUPABASE_URL;
     const anonKey = process.env.VITE_SUPABASE_ANON_KEY;

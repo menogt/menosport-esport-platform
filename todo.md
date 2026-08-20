@@ -2756,3 +2756,62 @@
 
 - [ ] Complete and sync the Vercel serverless tRPC deployment fix using local validation as the gate
 - [ ] Carry the deployed auth/browser verification as a documented post-deploy check instead of blocking remaining implementation
+
+## Vercel build failure — missing Supabase server files
+
+- [x] Sync `server/supabaseDomain.ts` and `server/_core/supabaseAdmin.ts` into GitHub main
+- [x] Re-run the production build and confirm the missing-module errors are gone
+- [ ] Verify the next Vercel deployment reaches the API-function stage
+- [x] Add a direct `/api/trpc` serverless function and remove the conflicting API rewrite
+- [x] Run TypeScript, 25 Vitest tests, production build, and Vercel configuration validation after the direct-route fix
+- [x] Add a Vercel catch-all function for `/api/trpc/*` procedure paths and normalize the function URL before tRPC handling
+- [x] Fix the Vercel catch-all import path so the deployed function can load the shared Express app
+- [ ] Rebuild and verify the live `auth.me` route no longer returns `FUNCTION_INVOCATION_FAILED`
+
+## Confirmed Vercel function-builder defect
+
+- [x] Explicitly configure the Vercel Node runtime for `api/**/*.ts`
+- [x] Make the SPA fallback regex exclude `/api/*` before filesystem function routing
+- [x] Validate that the Vercel build artifact registers the catch-all API function
+
+## Vercel runtime configuration correction
+
+- [x] Remove the invalid `nodejs20.x` Vercel functions runtime declaration
+- [ ] Validate and redeploy the API function after relying on Vercel’s automatic Node runtime detection
+- [x] Replace the extensionless dynamic Vercel app import with a static import compatible with Vercel bundling
+- [ ] Rebuild and verify the live tRPC endpoint returns JSON after the static-import fix
+
+## Explicit Vercel builders
+
+- [x] Configure explicit `@vercel/node` and static-build builders so the API function bundles `server/**`
+- [ ] Verify the deployed function no longer fails during module evaluation
+- [ ] Add a temporary zero-import Vercel health probe to isolate function registration from the server module graph
+- [ ] Replace the cross-tree TypeScript import with a bundled JavaScript serverless entry if the probe confirms registration
+
+## Confirmed Vercel project/source mismatch
+
+- [ ] Confirm the Vercel project is connected to `menogt/menosport-esport-platform` `main` and using the repository root
+- [ ] Confirm the deployment includes `api/health.ts` and the `/api/trpc/*` function files
+- [ ] Re-run the production API probe after the correct project/source is promoted
+
+## Vercel frozen-install mismatch
+
+- [x] Align `package.json` patchedDependencies with `pnpm-lock.yaml`
+- [x] Pin the project package manager so Vercel uses the intended pnpm version
+- [x] Validate `pnpm install --frozen-lockfile` from a clean copy before syncing
+
+## Vercel automatic function detection fallback
+
+- [x] Remove explicit `builds` and `routes` blocks that are preventing automatic `api/` function publication
+- [x] Use `outputDirectory` plus an API-excluding SPA rewrite so Vercel auto-detects TypeScript functions
+- [ ] Rebuild and verify `/api/health` and `/api/trpc/auth.me` on the live domain
+- [x] Guard server Supabase bearer-client initialization when Vercel env values are absent
+- [x] Validate unauthenticated `auth.me` no longer crashes the Vercel function during module import
+- [ ] Add temporary staged Vercel module probes for Express, router, context, and shared app imports
+- [ ] Remove diagnostic probes after identifying the exact import that crashes production
+
+- [x] Isolate Vercel `FUNCTION_INVOCATION_FAILED` with live module probes: Express imports, while router/context imports crash.
+- [x] Guard Supabase client construction against malformed or missing deployment environment values.
+- [x] Add regression coverage for invalid Supabase server URL handling.
+- [ ] Remove temporary Vercel module probes and push the production fix to GitHub main.
+- [ ] Verify the promoted live `/api/trpc/auth.me` response after the production deployment.
