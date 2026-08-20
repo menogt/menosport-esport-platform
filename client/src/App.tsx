@@ -4,6 +4,7 @@ import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import NotFound from "@/pages/NotFound";
 import BracketPage from "@/pages/BracketPage";
 import ClanDashboard from "@/pages/ClanDashboard";
+import ClanProfilePage from "@/pages/ClanProfilePage";
 import Home from "@/pages/Home";
 import MatchRoomPage from "@/pages/MatchRoomPage";
 import PlayerDashboard from "@/pages/PlayerDashboard";
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/login" component={LoginPage} />
       <Route path="/tournaments/live" component={Phase3Page} />
       <Route path="/games" component={Phase3Page} />
+      <Route path="/clans/:slug" component={ClanProfilePage} />
       <Route path="/clans" component={Phase3Page} />
       <Route path="/media" component={Phase3Page} />
       <Route path="/arena" component={Phase4Page} />

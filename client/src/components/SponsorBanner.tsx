@@ -1,6 +1,7 @@
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { SponsorCampaign } from "@shared/phase4";
+import { toast } from "sonner";
 
 const toneClass = {
   lime: "border-lime-300/25 bg-lime-300/[0.07]",
@@ -19,7 +20,7 @@ export function SponsorBanner({ campaign, compact = false }: { campaign: Sponsor
           <h2 className="mt-2 font-display text-2xl tracking-[-0.04em] text-white md:text-3xl">{campaign.headline}</h2>
           {!compact && <p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">{campaign.body}</p>}
         </div>
-        <Button variant="outline" className="w-fit border-white/15 bg-white/[0.03] text-white hover:bg-white/10"><Sparkles className="mr-2 h-4 w-4 text-lime-300" />{campaign.cta}<ArrowUpRight className="ml-2 h-4 w-4" /></Button>
+        <Button onClick={() => toast.message(`${campaign.cta} is an integration-ready partner action; CRM routing is not connected yet.`)} variant="outline" className="w-fit border-white/15 bg-white/[0.03] text-white hover:bg-white/10"><Sparkles className="mr-2 h-4 w-4 text-lime-300" />{campaign.cta}<ArrowUpRight className="ml-2 h-4 w-4" /></Button>
       </div>
     </section>
   );

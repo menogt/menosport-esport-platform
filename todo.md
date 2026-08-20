@@ -2831,3 +2831,10 @@
 - [x] Create original Meno Arena brand-mark and game/media visual assets that do not use unlicensed third-party game logos.
 - [x] Integrate the new visual assets into relevant arena, store, clan, and media surfaces with responsive layouts.
 - [x] Validate the refreshed visual system, Clan Directory, Media Gallery, tests, and production build before checkpointing: desktop/mobile route review, 30 Vitest tests, TypeScript, and production build pass.
+
+- [x] Audit visible user-facing buttons and links, classifying working, intentionally unavailable, and broken controls: repaired dead home, sponsor, match-room, clan-directory, and media-gallery actions; provider-dependent actions now return explicit feedback.
+- [x] Define data and navigation contracts for clan profile pages, media categories, and image lightbox behavior.
+- [x] Build clan profile pages with branded roster, activity, and tournament context.
+- [x] Add filterable media categories and an accessible full-screen gallery viewer.
+- [x] Repair genuinely broken user-facing controls or provide explicit availability feedback for provider-dependent actions.
+- [x] Add regression tests, verify desktop/mobile interaction flows, production build, and checkpoint the changes: 32 Vitest tests, TypeScript, production build, desktop/mobile review, live HMR updates, and a clean source-marker scan pass.
