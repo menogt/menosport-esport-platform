@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { trpc } from "@/lib/trpc";
 import { TRPCClientError } from "@trpc/client";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type UseAuthOptions = {
   redirectOnUnauthenticated?: boolean;
@@ -15,8 +15,30 @@ export function useAuth(options?: UseAuthOptions) {
   // desync it from an in-flight login's `state`.
   const { redirectOnUnauthenticated = false, redirectPath } = options ?? {};
   const utils = trpc.useUtils();
+  const [authReady, setAuthReady] = useState(false);
+
+  // Supabase restores its persisted session asynchronously. Do not let the
+  // first protected query race that restoration and lock the UI into signed-out state.
+  useEffect(() => {
+    let mounted = true;
+    const { data } = supabase.auth.onAuthStateChange(() => {
+      if (!mounted) return;
+      setAuthReady(true);
+      void utils.auth.me.invalidate();
+    });
+
+    void supabase.auth.getSession().finally(() => {
+      if (mounted) setAuthReady(true);
+    });
+
+    return () => {
+      mounted = false;
+      data.subscription.unsubscribe();
+    };
+  }, [utils]);
 
   const meQuery = trpc.auth.me.useQuery(undefined, {
+    enabled: authReady,
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -58,7 +80,7 @@ export function useAuth(options?: UseAuthOptions) {
     );
     return {
       user: meQuery.data ?? null,
-      loading: meQuery.isLoading || logoutMutation.isPending,
+      loading: !authReady || meQuery.isLoading || logoutMutation.isPending,
       error: meQuery.error ?? logoutMutation.error ?? null,
       isAuthenticated: Boolean(meQuery.data),
     };
@@ -66,6 +88,7 @@ export function useAuth(options?: UseAuthOptions) {
     meQuery.data,
     meQuery.error,
     meQuery.isLoading,
+    authReady,
     logoutMutation.error,
     logoutMutation.isPending,
   ]);
