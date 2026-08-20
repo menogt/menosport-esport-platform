@@ -2739,3 +2739,20 @@
 - [ ] Confirm the promoted Vercel build contains the auth-loop fix commit
 - [x] Apply the evidence-based production auth patch, if needed
 - [ ] Re-run tests/build and verify the protected dashboard no longer shows the auth gate
+
+## Production auth loop — direct evidence follow-up
+
+- [ ] Capture the production `auth.me` request status/body and deployed build identifier
+- [ ] Compare the deployed auth server configuration with local Supabase verification assumptions
+- [ ] Apply and validate the final production auth fix without relying on browser cache state
+
+## Confirmed production API deployment defect
+
+- [x] Expose the Express tRPC API as a Vercel serverless function instead of serving only `dist/public`
+- [x] Preserve SPA rewrites while routing `/api/*` to the server function
+- [ ] Verify production `auth.me` and `dashboard.player` return JSON rather than Vercel 404 HTML
+
+## Proceed without manual browser verification
+
+- [ ] Complete and sync the Vercel serverless tRPC deployment fix using local validation as the gate
+- [ ] Carry the deployed auth/browser verification as a documented post-deploy check instead of blocking remaining implementation
