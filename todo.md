@@ -2826,3 +2826,8 @@
 - [x] Define Phase 4 integration-ready domain contracts and routes without activating external providers.
 - [x] Build Phase 4 community integrations, sponsor, storefront, and analytics UI with clearly identified placeholders where services remain unconnected.
 - [x] Add Phase 4 tests, validate responsive UI and production build, and save a checkpoint: 30 Vitest tests, TypeScript, production build, and desktop/mobile route review pass. Discord, Twitch, checkout, and external analytics remain intentionally unconnected placeholders.
+
+- [x] Audit the existing Clan Directory/Leaderboard and Media Gallery routes, pages, and public navigation for discoverability: `/clans` and `/media` route to the Phase 3 anchors; Phase 4 navigation now exposes both destinations.
+- [x] Create original Meno Arena brand-mark and game/media visual assets that do not use unlicensed third-party game logos.
+- [x] Integrate the new visual assets into relevant arena, store, clan, and media surfaces with responsive layouts.
+- [x] Validate the refreshed visual system, Clan Directory, Media Gallery, tests, and production build before checkpointing: desktop/mobile route review, 30 Vitest tests, TypeScript, and production build pass.

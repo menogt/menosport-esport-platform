@@ -5,6 +5,7 @@ import { StatCard } from "@/components/StatCard";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { cartSubtotalCents, formatCurrency, type CartLine, type StoreProduct } from "@shared/phase4";
+import { BrandMark } from "@/components/BrandMark";
 import { BellRing, Bot, ChevronRight, CircleDot, Disc3, ExternalLink, Gamepad2, Radio, ShieldCheck, ShoppingBag, Twitch, UsersRound } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -44,15 +45,18 @@ function Phase4Content({ mode }: { mode: PhaseMode }) {
     <div className="min-h-screen overflow-hidden bg-[#070907] text-white">
       <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#070907]/90 px-5 py-4 backdrop-blur-xl md:px-10">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-6">
-          <Link href="/" className="flex items-center gap-3"><span className="grid h-8 w-8 place-items-center rounded-full bg-lime-300 text-xs font-black text-black">M</span><span className="font-display text-lg tracking-[-0.04em]">MENO ARENA</span></Link>
+          <Link href="/"><BrandMark /></Link>
           <nav className="hidden items-center gap-6 text-xs font-semibold uppercase tracking-[0.16em] text-white/45 md:flex">
             <Link href="/arena" className={mode === "community" ? "text-lime-300" : "hover:text-white"}>Arena</Link>
+            <Link href="/clans" className="hover:text-white">Clans</Link>
+            <Link href="/media" className="hover:text-white">Media</Link>
             <Link href="/sponsors" className={mode === "sponsors" ? "text-lime-300" : "hover:text-white"}>Partners</Link>
             <Link href="/store" className={mode === "store" ? "text-lime-300" : "hover:text-white"}>Store</Link>
             <Link href="/dashboard/admin" className={mode === "analytics" ? "text-lime-300" : "hover:text-white"}>Intel</Link>
           </nav>
           <Link href="/tournaments/live"><Button variant="outline" className="hidden border-white/15 bg-white/[0.03] text-white hover:bg-white/10 sm:flex">Live circuit<ChevronRight className="ml-2 h-4 w-4" /></Button></Link>
         </div>
+        <nav className="mx-auto mt-3 flex max-w-[1440px] gap-4 overflow-x-auto border-t border-white/[0.07] pt-3 font-mono text-[9px] uppercase tracking-[0.16em] text-white/55 md:hidden"><Link href="/arena" className="shrink-0 hover:text-lime-300">Arena</Link><Link href="/clans" className="shrink-0 hover:text-lime-300">Clans</Link><Link href="/media" className="shrink-0 hover:text-lime-300">Media</Link><Link href="/sponsors" className="shrink-0 hover:text-lime-300">Partners</Link><Link href="/store" className="shrink-0 hover:text-lime-300">Store</Link></nav>
       </header>
 
       <main className="mx-auto max-w-[1440px] px-5 pb-20 pt-12 md:px-10 md:pt-16">
