@@ -1,10 +1,14 @@
 import fs from "node:fs";
 
 const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
-if (!Array.isArray(config.builds) || config.builds[0]?.use !== "@vercel/node") {
-  throw new Error("explicit node builder missing");
+if (config.builds || config.routes) {
+  throw new Error("explicit builders/routes must be absent so Vercel can auto-detect api functions");
 }
-if (config.builds[0]?.config?.includeFiles?.includes("server/**") !== true) {
-  throw new Error("server includeFiles missing");
+if (config.outputDirectory !== "dist/public") {
+  throw new Error("outputDirectory must remain dist/public");
 }
-console.log("explicit Vercel builders config valid");
+const spaRewrite = config.rewrites?.find((rewrite) => rewrite.destination === "/index.html");
+if (!spaRewrite || !spaRewrite.source.includes("api")) {
+  throw new Error("API-safe SPA rewrite missing");
+}
+console.log("automatic Vercel functions config valid");
