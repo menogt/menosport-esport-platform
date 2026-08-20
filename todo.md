@@ -35,7 +35,7 @@
 - [x] Add focused tests and validate the next-phase experience
 - [x] Add focused success-path tests for clan, tournament, match, and dispute mutations
 - [x] Validate the full authoritative Phase 2 scope with success-path evidence
-- [ ] Save the Phase 3 checkpoint after Phase 2 is complete
+- [x] Save the Phase 3 checkpoint after Phase 2 is complete
 - [x] Recheck admin procedure runtime health in the browser and server logs
 - [x] Verify clan creation success feedback through the browser UI
 - [x] Verify tournament creation success feedback through the browser UI
@@ -2680,16 +2680,16 @@
 
 ## Phase 3 — Realtime, payments, notifications, hubs, clans, media
 
-- [ ] Add Phase 3 realtime contract and refresh strategy for live matches and brackets
-- [ ] Add backend procedures and frontend refresh indicators for live tournament updates
-- [ ] Add payment sandbox registration flow with fee breakdown and simulated success/error states
-- [ ] Add notification data contract, backend reads, and in-app notification panel
-- [ ] Add game hub routes with parallax headers and game-specific metadata
-- [ ] Add clan directory and sortable leaderboard route with fictional organization data
-- [ ] Add media gallery route with vertical highlight cards and interaction states
-- [ ] Add focused Vitest coverage for Phase 3 procedures and state transitions
-- [ ] Verify Phase 3 routes and success/error states in the browser
-- [ ] Save the Phase 3 checkpoint after all tests and verification pass
+- [x] Add Phase 3 realtime contract and refresh strategy for live matches and brackets
+- [x] Add backend procedures and frontend refresh indicators for live tournament updates
+- [x] Add payment sandbox registration flow with fee breakdown and simulated success/error states
+- [x] Add notification data contract, backend reads, and in-app notification panel
+- [x] Add game hub routes with parallax headers and game-specific metadata
+- [x] Add clan directory and sortable leaderboard route with fictional organization data
+- [x] Add media gallery route with vertical highlight cards and interaction states
+- [x] Add focused Vitest coverage for Phase 3 procedures and state transitions
+- [x] Verify Phase 3 routes and success/error states in the browser
+- [x] Save the Phase 3 checkpoint after all tests and verification pass
 
 ## Phase 2 verification gaps carried into Phase 3
 
@@ -2705,12 +2705,30 @@
 - [x] Add Supabase project URL and anon-key environment configuration through the project secret workflow
 - [x] Define whether Supabase owns auth, application data, realtime, or a staged subset
 - [x] Implement Supabase client boundaries without hardcoding credentials
-- [ ] Migrate and validate protected authenticated flows against Supabase
-- [ ] Preserve existing product behavior and add tests for Supabase-backed auth/data paths
+- [x] Migrate and validate protected authenticated flows against Supabase
+- [x] Preserve existing product behavior and add tests for Supabase-backed auth/data paths
 - [ ] Verify the deployed login callback and protected routes after migration
 
-- [ ] Apply a Supabase PostgreSQL schema for users, profiles, teams, clans, tournaments, matches, disputes, notifications, and media before switching domain persistence
-- [ ] Repoint domain queries and mutations from Drizzle/MySQL to Supabase after the schema is available
+- [x] Apply a Supabase PostgreSQL schema for users, profiles, teams, clans, tournaments, matches, disputes, notifications, and media before switching domain persistence
+- [x] Repoint remaining domain queries and mutations from Drizzle/MySQL to Supabase after the schema is available
 
 - [x] Generate a reviewed Supabase PostgreSQL migration with domain tables, indexes, triggers, and RLS policies
 - [x] Add migration instructions and validation queries for the Supabase SQL Editor
+
+- [x] Add Supabase domain adapter for profile, team, clan, tournament, match, report, and dispute persistence
+- [x] Preserve deterministic Vitest fixtures while enabling Supabase persistence outside test runtime
+- [x] Run TypeScript, full Vitest suite, and production build after the domain adapter changes
+
+- [x] Repoint the authenticated player-dashboard aggregate to Supabase and validate its response contract
+
+## Production routing fix
+
+- [x] Add Vercel SPA fallback rewrites for `/login` and protected client routes
+- [x] Rebuild and verify the deployed login deep link after the routing fix
+
+## Production Supabase auth loop
+
+- [x] Reproduce and trace the deployed Supabase session handoff from login to protected tRPC request
+- [x] Fix the smallest client/server session persistence defect
+- [x] Add regression coverage for protected-session hydration and dashboard navigation
+- [ ] Rebuild and verify the deployed sign-in no longer returns to the auth gate

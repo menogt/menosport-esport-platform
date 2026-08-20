@@ -16,8 +16,12 @@ import {
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+import { hasSupabaseDomainClient, supabaseAdmin } from "./_core/supabaseAdmin";
+import { supabaseCreateClan, supabaseCreateTeam, supabaseCreateTournament, supabaseGetClanDashboard, supabaseGetPlayerDashboard, supabaseGetClansForUser, supabaseGetOpenDisputes, supabaseGetTeamsForUser, supabaseGetTournament, supabaseGetTournamentMatches, supabaseOpenDispute, supabaseResolveDispute, supabaseSubmitMatchReport, supabaseUpdatePlayerProfile } from "./supabaseDomain";
 
 let _db: ReturnType<typeof drizzle> | null = null;
+const isVitestRuntime = process.env.NODE_ENV === "test" || Boolean(process.env.VITEST_WORKER_ID) || process.argv.some(argument => argument.includes("vitest"));
+const shouldUseSupabaseDomain = () => !isVitestRuntime && hasSupabaseDomainClient();
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
@@ -31,8 +35,41 @@ export async function getDb() {
   return _db;
 }
 
+export function normalizeSupabaseUserId(openId: string) {
+  return openId.startsWith("supabase:") ? openId.slice("supabase:".length) : openId;
+}
+
+function mapSupabaseUser(row: Record<string, unknown>) {
+  const supabaseUserId = String(row.supabase_user_id);
+  return {
+    id: Number(row.id),
+    openId: `supabase:${supabaseUserId}`,
+    name: (row.name as string | null) ?? null,
+    email: (row.email as string | null) ?? null,
+    loginMethod: "supabase",
+    role: (row.role as "admin" | "user") ?? "user",
+    lastSignedIn: new Date(String(row.last_signed_in)),
+    createdAt: new Date(String(row.created_at)),
+    updatedAt: new Date(String(row.updated_at)),
+  };
+}
+
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) throw new Error("User openId is required for upsert");
+
+  if (shouldUseSupabaseDomain() && supabaseAdmin) {
+    const row = {
+      supabase_user_id: normalizeSupabaseUserId(user.openId),
+      name: user.name ?? null,
+      email: user.email ?? null,
+      role: user.role ?? (user.openId === ENV.ownerOpenId ? "admin" : "user"),
+      last_signed_in: (user.lastSignedIn ?? new Date()).toISOString(),
+    };
+    const { error } = await supabaseAdmin.from("users").upsert(row, { onConflict: "supabase_user_id" });
+    if (error) throw new Error(`[Supabase] Failed to upsert user: ${error.message}`);
+    return;
+  }
+
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot upsert user: database not available");
@@ -68,6 +105,12 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 }
 
 export async function getUserByOpenId(openId: string) {
+  if (shouldUseSupabaseDomain() && supabaseAdmin) {
+    const { data, error } = await supabaseAdmin.from("users").select("*").eq("supabase_user_id", normalizeSupabaseUserId(openId)).maybeSingle();
+    if (error) throw new Error(`[Supabase] Failed to load user: ${error.message}`);
+    return data ? mapSupabaseUser(data) : undefined;
+  }
+
   const db = await getDb();
   if (!db) return undefined;
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
@@ -114,6 +157,7 @@ const fallbackMatches = [
 ];
 
 export async function updatePlayerProfile(input: { userId: number; handle: string; bio?: string; region?: string; primaryGame?: string }) {
+  if (shouldUseSupabaseDomain()) return supabaseUpdatePlayerProfile(input);
   const db = await getDb();
   const normalized = {
     userId: input.userId,
@@ -129,6 +173,7 @@ export async function updatePlayerProfile(input: { userId: number; handle: strin
 }
 
 export async function getPlayerDashboard(userId: number) {
+  if (shouldUseSupabaseDomain()) return supabaseGetPlayerDashboard(userId);
   const db = await getDb();
   if (!db) {
     return {
@@ -158,6 +203,7 @@ export async function getPlayerDashboard(userId: number) {
 }
 
 export async function getTeamsForUser(userId: number) {
+  if (shouldUseSupabaseDomain()) return supabaseGetTeamsForUser(userId);
   const db = await getDb();
   if (!db) return fallbackTeams;
   const rows = await db.select({ team: teams }).from(teamMembers).innerJoin(teams, eq(teamMembers.teamId, teams.id)).where(eq(teamMembers.userId, userId));
@@ -165,6 +211,7 @@ export async function getTeamsForUser(userId: number) {
 }
 
 export async function createTeamForUser(input: { ownerId: number; name: string; tag: string; game: string; region?: string; description?: string }) {
+  if (shouldUseSupabaseDomain()) return supabaseCreateTeam(input);
   const db = await getDb();
   if (!db) return { ...input, id: Date.now(), createdAt: new Date(), updatedAt: new Date() };
   const result = await db.insert(teams).values(input);
@@ -175,6 +222,7 @@ export async function createTeamForUser(input: { ownerId: number; name: string; 
 }
 
 export async function getTournamentById(tournamentId: number) {
+  if (shouldUseSupabaseDomain()) return supabaseGetTournament(tournamentId);
   const db = await getDb();
   if (!db) return fallbackTournaments.find(tournament => tournament.id === tournamentId) ?? null;
   const rows = await db.select().from(tournaments).where(eq(tournaments.id, tournamentId)).limit(1);
@@ -182,6 +230,7 @@ export async function getTournamentById(tournamentId: number) {
 }
 
 export async function getTournamentMatches(tournamentId: number) {
+  if (shouldUseSupabaseDomain()) return supabaseGetTournamentMatches(tournamentId);
   const db = await getDb();
   if (!db) return fallbackMatches.filter(match => match.tournamentId === tournamentId);
   const rows = await db.select().from(matches).where(eq(matches.tournamentId, tournamentId)).orderBy(matches.round, matches.position);
@@ -193,6 +242,7 @@ const fallbackClans = [
 ];
 
 export async function getClansForUser(userId: number) {
+  if (shouldUseSupabaseDomain()) return supabaseGetClansForUser(userId);
   const db = await getDb();
   if (!db) return fallbackClans;
   const rows = await db.select().from(clans).where(eq(clans.ownerId, userId)).orderBy(desc(clans.createdAt));
@@ -200,6 +250,7 @@ export async function getClansForUser(userId: number) {
 }
 
 export async function createClanForUser(input: { ownerId: number; name: string; tag: string; region?: string; bio?: string; foundedYear?: number; socials?: string }) {
+  if (shouldUseSupabaseDomain()) return supabaseCreateClan(input);
   const db = await getDb();
   const values = {
     ownerId: input.ownerId,
@@ -219,6 +270,7 @@ export async function createClanForUser(input: { ownerId: number; name: string; 
 }
 
 export async function getClanDashboard(clanId: number, userId: number) {
+  if (shouldUseSupabaseDomain()) return supabaseGetClanDashboard(clanId, userId);
   const db = await getDb();
   if (!db) return { clan: fallbackClans.find(clan => clan.id === clanId) ?? null, teams: fallbackTeams };
   const clanRows = await db.select().from(clans).where(and(eq(clans.id, clanId), eq(clans.ownerId, userId))).limit(1);
@@ -242,6 +294,7 @@ export async function createTournamentForUser(input: {
   streamUrl?: string;
   clanEligible?: boolean;
 }) {
+  if (shouldUseSupabaseDomain()) return supabaseCreateTournament(input);
   const db = await getDb();
   const values = {
     createdBy: input.createdBy,
@@ -267,6 +320,7 @@ export async function createTournamentForUser(input: {
 }
 
 export async function submitMatchReport(input: { matchId: number; submittedBy: number; teamId: number; scoreFor: number; scoreAgainst: number; screenshotUrl?: string; notes?: string }) {
+  if (shouldUseSupabaseDomain()) return supabaseSubmitMatchReport(input);
   const db = await getDb();
   const values = {
     matchId: input.matchId,
@@ -287,6 +341,7 @@ export async function submitMatchReport(input: { matchId: number; submittedBy: n
 }
 
 export async function openMatchDispute(input: { matchId: number; openedBy: number; reason: string }) {
+  if (shouldUseSupabaseDomain()) return supabaseOpenDispute(input);
   const db = await getDb();
   const values = { matchId: input.matchId, openedBy: input.openedBy, reason: input.reason.trim(), status: "open" as const };
   if (!db) return { ...values, id: Date.now(), adminDecision: null, winnerTeamId: null, resolvedBy: null, resolvedAt: null, createdAt: new Date(), updatedAt: new Date() };
@@ -298,12 +353,14 @@ export async function openMatchDispute(input: { matchId: number; openedBy: numbe
 }
 
 export async function getOpenDisputes() {
+  if (shouldUseSupabaseDomain()) return supabaseGetOpenDisputes();
   const db = await getDb();
   if (!db) return [];
   return db.select().from(disputes).where(eq(disputes.status, "open")).orderBy(desc(disputes.createdAt));
 }
 
 export async function resolveMatchDispute(input: { disputeId: number; resolvedBy: number; winnerTeamId: number; adminDecision: string }) {
+  if (shouldUseSupabaseDomain()) return supabaseResolveDispute(input);
   const db = await getDb();
   if (!db) return { ...input, status: "resolved" as const, resolvedAt: new Date() };
   const disputeRows = await db.select().from(disputes).where(eq(disputes.id, input.disputeId)).limit(1);

@@ -12,6 +12,7 @@ import TeamDashboard from "@/pages/TeamDashboard";
 import TournamentCreatePage from "@/pages/TournamentCreatePage";
 import AdminDisputesPage from "@/pages/AdminDisputesPage";
 import LoginPage from "@/pages/LoginPage";
+import Phase3Page from "@/pages/Phase3Page";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -21,6 +22,11 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/login" component={LoginPage} />
+      <Route path="/tournaments/live" component={Phase3Page} />
+      <Route path="/games" component={Phase3Page} />
+      <Route path="/clans" component={Phase3Page} />
+      <Route path="/media" component={Phase3Page} />
+      <Route path="/arena" component={Phase3Page} />
       <Route path="/dashboard/player" component={PlayerDashboard} />
       <Route path="/dashboard/team" component={TeamDashboard} />
       <Route path="/dashboard/clan" component={ClanDashboard} />
