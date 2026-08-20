@@ -1,7 +1,5 @@
 import { createVercelApiApp } from "../../server/_core/app";
 
-const app = createVercelApiApp();
-
 type VercelResponse = {
   statusCode: number;
   setHeader(name: string, value: string): void;
@@ -12,8 +10,19 @@ type VercelRequest = {
   url?: string;
 };
 
+let app: ReturnType<typeof createVercelApiApp> | undefined;
+
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const originalUrl = req.url ?? "/";
-  req.url = originalUrl.replace(/^\/api\/trpc/, "") || "/";
-  return app(req as never, res as never);
+  try {
+    app ??= createVercelApiApp();
+    const originalUrl = req.url ?? "/";
+    req.url = originalUrl.replace(/^\/api\/trpc/, "") || "/";
+    return app(req as never, res as never);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[Vercel tRPC] App initialization failed", error);
+    res.statusCode = 500;
+    res.setHeader("content-type", "application/json");
+    res.end(JSON.stringify({ error: "Vercel tRPC app initialization failed", message }));
+  }
 }
