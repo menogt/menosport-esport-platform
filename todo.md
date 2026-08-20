@@ -2626,3 +2626,7 @@
 - [x] Phase 1: Add reusable visual primitives for glass panels, neon accents, stat rows, and section headers
 - [x] Phase 1: Verify the layout with type checks, Vitest, and responsive screenshots
 - [x] Phase 1: Mark completed implementation items and prepare the Phase 1 checkpoint
+
+- [ ] Replace the selected GitHub repository working tree with the current checkpointed Meno Arena project
+- [ ] Preserve the repository's existing .gitignore and README files during replacement
+- [ ] Validate the replacement and commit it directly to main
