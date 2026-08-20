@@ -2,10 +2,6 @@
   "outputDirectory": "dist/public",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    },
-    {
       "source": "/((?!api/|assets/).*)",
       "destination": "/index.html"
     }

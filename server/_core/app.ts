@@ -5,7 +5,7 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 
-export function createApp(): Express {
+function createConfiguredApp(trpcPath: string): Express {
   const app = express();
 
   app.use(express.json({ limit: "50mb" }));
@@ -14,7 +14,7 @@ export function createApp(): Express {
   registerOAuthRoutes(app);
 
   app.use(
-    "/api/trpc",
+    trpcPath,
     createExpressMiddleware({
       router: appRouter,
       createContext,
@@ -22,4 +22,12 @@ export function createApp(): Express {
   );
 
   return app;
+}
+
+export function createApp(): Express {
+  return createConfiguredApp("/api/trpc");
+}
+
+export function createVercelApiApp(): Express {
+  return createConfiguredApp("/");
 }
