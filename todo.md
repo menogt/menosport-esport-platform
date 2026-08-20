@@ -2821,3 +2821,8 @@
 - [x] Diagnose and fix the remaining live Supabase login/session handoff failure after Vercel build settings were corrected: auth.me now waits for Supabase session restoration and refreshes on auth-state changes; TypeScript, 28 Vitest tests, and production build pass.
 
 - [x] Diagnose and fix the Vite HMR failures affecting `index.css`, `DashboardLayout`, and protected route modules in the development preview: an incomplete Git synchronization left conflict markers in `server/routers.ts`; the source tree is now clean, the dev server was restarted, and a stylesheet HMR update completed successfully.
+
+- [x] Review the Phase 4 Discord/Twitch, sponsors, storefront, and analytics requirements against the current platform foundations.
+- [x] Define Phase 4 integration-ready domain contracts and routes without activating external providers.
+- [x] Build Phase 4 community integrations, sponsor, storefront, and analytics UI with clearly identified placeholders where services remain unconnected.
+- [x] Add Phase 4 tests, validate responsive UI and production build, and save a checkpoint: 30 Vitest tests, TypeScript, production build, and desktop/mobile route review pass. Discord, Twitch, checkout, and external analytics remain intentionally unconnected placeholders.

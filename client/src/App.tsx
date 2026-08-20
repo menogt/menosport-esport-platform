@@ -13,6 +13,7 @@ import TournamentCreatePage from "@/pages/TournamentCreatePage";
 import AdminDisputesPage from "@/pages/AdminDisputesPage";
 import LoginPage from "@/pages/LoginPage";
 import Phase3Page from "@/pages/Phase3Page";
+import Phase4Page from "@/pages/Phase4Page";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -26,12 +27,15 @@ function Router() {
       <Route path="/games" component={Phase3Page} />
       <Route path="/clans" component={Phase3Page} />
       <Route path="/media" component={Phase3Page} />
-      <Route path="/arena" component={Phase3Page} />
+      <Route path="/arena" component={Phase4Page} />
+      <Route path="/sponsors" component={Phase4Page} />
+      <Route path="/store" component={Phase4Page} />
       <Route path="/dashboard/player" component={PlayerDashboard} />
       <Route path="/dashboard/team" component={TeamDashboard} />
       <Route path="/dashboard/clan" component={ClanDashboard} />
       <Route path="/tournaments/new" component={TournamentCreatePage} />
       <Route path="/admin/disputes" component={AdminDisputesPage} />
+      <Route path="/dashboard/admin" component={Phase4Page} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/matches/:id" component={MatchRoomPage} />
       <Route path="/brackets/:id" component={BracketPage} />

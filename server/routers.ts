@@ -20,6 +20,7 @@ import {
   getTournamentById,
   getTournamentMatches,
 } from "./db";
+import { getPhase4Hub, getSponsorCampaigns, getStoreProducts } from "./phase4";
 
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required." });
@@ -107,6 +108,18 @@ export const appRouter = router({
     matches: protectedProcedure
       .input(z.object({ tournamentId: z.number().int().positive() }))
       .query(({ input }) => getTournamentMatches(input.tournamentId)),
+  }),
+  community: router({
+    hub: publicProcedure.query(() => ({ integrations: getPhase4Hub().integrations, streamSchedule: getPhase4Hub().streamSchedule })),
+  }),
+  sponsors: router({
+    featured: publicProcedure.query(() => getSponsorCampaigns()),
+  }),
+  store: router({
+    catalog: publicProcedure.query(() => getStoreProducts()),
+  }),
+  analytics: router({
+    overview: publicProcedure.query(() => getPhase4Hub().analytics),
   }),
 });
 

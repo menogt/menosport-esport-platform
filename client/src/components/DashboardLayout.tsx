@@ -30,6 +30,7 @@ import {
   Users,
   UserRound,
   Shield,
+  ChartNoAxesCombined,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -43,6 +44,7 @@ const menuItems = [
   { icon: Brackets, label: "Live brackets", path: "/brackets/102" },
   { icon: Swords, label: "Match room", path: "/matches/301" },
   { icon: UserRound, label: "Player profile", path: "/profile" },
+  { icon: ChartNoAxesCombined, label: "Circuit intel", path: "/dashboard/admin" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
