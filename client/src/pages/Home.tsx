@@ -16,6 +16,9 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ParallaxHeroArt from "@/components/ParallaxHeroArt";
+import ParallaxGameCard from "@/components/ParallaxGameCard";
+import { ShimmerLine } from "@/components/VisualEffects";
 import { startLogin } from "@/const";
 
 const tournaments = [
@@ -124,14 +127,7 @@ function Hero() {
           </div>
           <div className="hero-proof"><div className="avatar-stack"><span>JF</span><span>RK</span><span>LM</span><span>+</span></div><span><strong>18,620</strong> competitors already in the arena</span></div>
         </div>
-        <div className="hero-art" aria-label="Abstract placeholder for licensed esports artwork">
-          <div className="hero-art__beam" />
-          <div className="hero-art__ring hero-art__ring--outer" />
-          <div className="hero-art__ring hero-art__ring--inner" />
-          <div className="hero-art__core"><span>MA</span></div>
-          <div className="hero-art__label"><span>LIVE SYSTEM</span><strong>COMPETITION<br />WITHOUT STATIC</strong></div>
-          <div className="hero-art__readout"><span>NET / 04</span><strong>01:24:08</strong></div>
-        </div>
+        <ParallaxHeroArt />
       </div>
       <div className="hero-foot page-shell"><span>SCROLL TO ENTER</span><span className="hero-foot__line" /><span>EST. 2024 · WORLDWIDE</span></div>
     </section>
@@ -151,7 +147,7 @@ function LiveMatches() {
 }
 
 function GameSection() {
-  return <section className="section-block section-block--dark" id="games"><div className="page-shell"><div className="section-heading"><div><SectionLabel>03 / Pick your arena</SectionLabel><h2>Every game has<br /><span>its own gravity.</span></h2></div><a className="text-link" href="#all-games">Browse all games <ArrowUpRight size={15} /></a></div><div className="game-grid">{games.map((game, index) => <a className="game-card" href={`#${game.name.toLowerCase().replaceAll(" ", "-")}`} key={game.name} style={{ "--game-accent": game.tone } as React.CSSProperties}><div className="game-card__top"><span>0{index + 1}</span><ArrowUpRight size={17} /></div><div className="game-card__visual"><div className="game-card__placeholder">{game.slot}</div><div className="game-card__glyph">{index === 0 ? "V" : index === 1 ? "M" : index === 2 ? "C" : "F"}</div></div><div className="game-card__bottom"><div><h3>{game.name}</h3><p>{game.meta}</p></div><span className="game-card__dot" /></div></a>)}</div></div></section>;
+  return <section className="section-block section-block--dark" id="games"><div className="page-shell"><div className="section-heading"><div><SectionLabel>03 / Pick your arena</SectionLabel><h2>Every game has<br /><span>its own gravity.</span></h2></div><a className="text-link" href="#all-games">Browse all games <ArrowUpRight size={15} /></a></div><div className="game-grid">{games.map((game, index) => <ParallaxGameCard key={game.name} name={game.name} meta={game.meta} tone={game.tone} index={index} glyph={index === 0 ? "V" : index === 1 ? "M" : index === 2 ? "C" : "F"} />)}</div></div></section>;
 }
 
 function LeaderboardSection() {
@@ -159,7 +155,7 @@ function LeaderboardSection() {
 }
 
 function SponsorSection() {
-  return <section className="sponsor-strip"><div className="page-shell sponsor-strip__inner"><div><span className="sponsor-kicker">THE ARENA IS PRESENTED BY</span><strong>ARC / NINE</strong></div><p>Partners who believe competitive gaming deserves a bigger stage.</p><a href="#sponsors" className="text-link">Partner with us <ArrowUpRight size={15} /></a></div></section>;
+  return <section className="sponsor-strip"><div className="page-shell sponsor-strip__inner"><div><span className="sponsor-kicker">THE ARENA IS PRESENTED BY</span><strong>ARC / NINE</strong></div><ShimmerLine /><p>Partners who believe competitive gaming deserves a bigger stage.</p><a href="#sponsors" className="text-link">Partner with us <ArrowUpRight size={15} /></a></div></section>;
 }
 
 export default function Home() {

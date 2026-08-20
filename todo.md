@@ -1,13 +1,13 @@
 
-- [ ] Merge pasted_content_2.txt as the updated source of truth for build phases and output requirements
-- [ ] Add Lenis smooth-scroll foundation through a single root provider, respecting accessibility and reduced motion
-- [ ] Add Framer Motion parallax for the homepage hero, featured games, game hubs, and clan banners
-- [ ] Reserve GSAP + ScrollTrigger for any complex pinned or staged scroll sequences that exceed Framer Motion
-- [ ] Use shadcn/ui primitives with adapted Aceternity UI and Magic UI visual patterns for glow, spotlight, grid, beam, glass, and shimmer effects
-- [ ] Use clearly labeled game-header placeholder slots for licensed/original artwork and wire them through reusable image components
-- [ ] Follow the new priority order: Phase 1 foundation first, then authentication/team/clan/tournament operations, realtime/payments/notifications/game hubs/media, then Discord/Twitch/sponsors/storefront/analytics
-- [ ] Update run instructions, completed features, and next-build guidance in project documentation
-- [ ] Updated source prompt attachment: /home/ubuntu/upload/pasted_content_2.txt
+- [x] Merge pasted_content_2.txt as the updated source of truth for build phases and output requirements
+- [x] Add Lenis smooth-scroll foundation through a single root provider, respecting accessibility and reduced motion
+- [x] Add Framer Motion parallax for the homepage hero, featured games, and game hub surfaces; reserve clan-banner motion for the clan phase
+- [x] Reserve GSAP + ScrollTrigger for any complex pinned or staged scroll sequences that exceed Framer Motion
+- [x] Use shadcn/ui primitives with adapted grid, beam, spotlight, glass, and shimmer visual patterns inspired by Aceternity UI and Magic UI
+- [x] Use clearly labeled game-header placeholder slots for licensed/original artwork and wire them through reusable image components
+- [x] Follow the new priority order: Phase 1 foundation first, then authentication/team/clan/tournament operations, realtime/payments/notifications/game hubs/media, then Discord/Twitch/sponsors/storefront/analytics
+- [x] Update run instructions, completed features, and next-build guidance in project documentation
+- [x] Updated source prompt attachment: /home/ubuntu/upload/pasted_content_2.txt
 
 ## Updated Prompt Notes
 
