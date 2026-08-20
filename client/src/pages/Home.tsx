@@ -18,8 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import ParallaxHeroArt from "@/components/ParallaxHeroArt";
 import ParallaxGameCard from "@/components/ParallaxGameCard";
-import { ShimmerLine } from "@/components/VisualEffects";
-import { startLogin } from "@/const";
+import { ScrollReveal, ShimmerLine } from "@/components/VisualEffects";
 
 const tournaments = [
   {
@@ -101,7 +100,7 @@ function Header() {
         <div className="header-actions">
           <button className="icon-button header-search" aria-label="Search"><Search size={17} /></button>
           <button className="icon-button header-bell" aria-label="Notifications"><Bell size={17} /><i /></button>
-          <Button className="header-login" variant="outline" onClick={startLogin}>Sign in <ArrowUpRight size={15} /></Button>
+          <Button className="header-login" variant="outline" onClick={() => { window.location.href = "/login"; }}>Sign in <ArrowUpRight size={15} /></Button>
           <button className="menu-button" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((value) => !value)}>{open ? <X size={20} /> : <Menu size={20} />}</button>
         </div>
       </div>
@@ -159,5 +158,5 @@ function SponsorSection() {
 }
 
 export default function Home() {
-  return <div className="app-shell"><Header /><main><Hero /><LiveTicker /><TournamentSection /><LiveMatches /><GameSection /><LeaderboardSection /><SponsorSection /><section className="final-cta" id="how-it-works"><div className="page-shell final-cta__inner"><div><SectionLabel>05 / Your move</SectionLabel><h2>There’s a bracket<br /><span>with your name on it.</span></h2></div><Button className="button-primary" asChild><a href="#register">Create your profile <ArrowUpRight size={16} /></a></Button></div></section></main><footer className="site-footer"><div className="page-shell site-footer__inner"><Logo /><span>Competition, organized.</span><div className="footer-links"><a href="#about">About</a><a href="#rules">Rules</a><a href="#sponsors">Sponsors</a><a href="#contact">Contact</a></div><span className="footer-copy">© 2024 Meno Arena</span></div></footer></div>;
+  return <div className="app-shell"><Header /><main><Hero /><LiveTicker /><ScrollReveal><TournamentSection /></ScrollReveal><ScrollReveal delay={60}><LiveMatches /></ScrollReveal><ScrollReveal delay={90}><GameSection /></ScrollReveal><ScrollReveal delay={120}><LeaderboardSection /></ScrollReveal><ScrollReveal delay={150}><SponsorSection /></ScrollReveal><ScrollReveal delay={180}><section className="final-cta" id="how-it-works"><div className="page-shell final-cta__inner"><div><SectionLabel>05 / Your move</SectionLabel><h2>There’s a bracket<br /><span>with your name on it.</span></h2></div><Button className="button-primary" asChild><a href="#register">Create your profile <ArrowUpRight size={16} /></a></Button></div></section></ScrollReveal></main><footer className="site-footer"><div className="page-shell site-footer__inner"><Logo /><span>Competition, organized.</span><div className="footer-links"><a href="#about">About</a><a href="#rules">Rules</a><a href="#sponsors">Sponsors</a><a href="#contact">Contact</a></div><span className="footer-copy">© 2024 Meno Arena</span></div></footer></div>;
 }

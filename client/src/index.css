@@ -285,3 +285,86 @@ h2 { margin: 0; color: #e5eae3; font-family: var(--arena-display); font-size: cl
 @media (prefers-reduced-motion: reduce) {
   *, *:before, *:after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Lenis-inspired motion language: the DOM keeps native layout while the scroll signal adds depth. */
+:root {
+  --scroll-progress: 0;
+  --scroll-velocity: 0;
+  --scroll-direction: 1;
+}
+
+.scroll-reveal {
+  --reveal-shift: var(--reveal-distance, 18px);
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-shift), 0) scale(0.985);
+  transition: opacity 720ms cubic-bezier(0.23, 1, 0.32, 1) var(--reveal-delay, 0ms), transform 900ms cubic-bezier(0.23, 1, 0.32, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+html[data-motion="full"] .hero-section {
+  --hero-drift: calc(var(--scroll-progress) * -5vw);
+}
+
+html[data-motion="full"] .hero-grid {
+  transform: translate3d(calc(var(--scroll-velocity) * -22px), var(--hero-drift), 0) scale(1.04);
+  transition: transform 120ms linear;
+}
+
+html[data-motion="full"] .hero-orb--one {
+  transform: translate3d(calc(var(--scroll-velocity) * 34px), calc(var(--scroll-progress) * -72px), 0);
+  transition: transform 120ms linear;
+}
+
+html[data-motion="full"] .hero-orb--two {
+  transform: translate3d(calc(var(--scroll-velocity) * -26px), calc(var(--scroll-progress) * 54px), 0);
+  transition: transform 120ms linear;
+}
+
+html[data-motion="full"] .hero-copy {
+  transform: translate3d(0, calc(var(--scroll-progress) * -30px), 0);
+  transition: transform 120ms linear;
+}
+
+html[data-motion="full"] .hero-foot {
+  opacity: calc(1 - (var(--scroll-progress) * 2.8));
+  transform: translate3d(0, calc(var(--scroll-progress) * -10px), 0);
+  transition: opacity 140ms linear, transform 140ms linear;
+}
+
+html[data-motion="full"] .live-ticker__inner {
+  transform: translate3d(calc(var(--scroll-velocity) * 10px), 0, 0);
+  transition: transform 140ms linear;
+}
+
+html[data-motion="full"] .section-heading h2,
+html[data-motion="full"] .leaderboard-intro h2 {
+  transform: translate3d(calc(var(--scroll-velocity) * -3px), 0, 0);
+  transition: transform 140ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 720px) {
+  html[data-motion="full"] .hero-copy,
+  html[data-motion="full"] .hero-grid,
+  html[data-motion="full"] .hero-orb--one,
+  html[data-motion="full"] .hero-orb--two {
+    transform: none;
+  }
+
+  .scroll-reveal {
+    transform: translate3d(0, 12px, 0) scale(0.99);
+  }
+}

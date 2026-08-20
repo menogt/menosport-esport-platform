@@ -1,4 +1,4 @@
-import { startLogin } from "@/const";
+import { supabase } from "@/lib/supabase";
 import { trpc } from "@/lib/trpc";
 import { TRPCClientError } from "@trpc/client";
 import { useCallback, useEffect, useMemo } from "react";
@@ -29,6 +29,7 @@ export function useAuth(options?: UseAuthOptions) {
 
   const logout = useCallback(async () => {
     try {
+      await supabase.auth.signOut();
       await logoutMutation.mutateAsync();
     } catch (error: unknown) {
       if (
@@ -76,11 +77,10 @@ export function useAuth(options?: UseAuthOptions) {
     if (typeof window === "undefined") return;
     if (redirectPath && window.location.pathname === redirectPath) return;
 
-    // Navigate at this moment only. startLogin() mints the nonce + cookie itself.
     if (redirectPath) {
       window.location.href = redirectPath;
-    } else {
-      startLogin();
+    } else if (window.location.pathname !== "/login") {
+      window.location.href = "/login";
     }
   }, [
     redirectOnUnauthenticated,
