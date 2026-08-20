@@ -1,16 +1,19 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { User } from "../../drizzle/schema";
 import { getUserByOpenId, upsertUser } from "../db";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? "";
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: { persistSession: false, autoRefreshToken: false },
-});
+const supabase: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+    : null;
 
 export async function authenticateSupabaseToken(token: string): Promise<User | null> {
-  if (!supabaseUrl || !supabaseAnonKey || !token) return null;
+  if (!supabase || !token) return null;
 
   const { data, error } = await supabase.auth.getUser(token);
   if (error || !data.user) return null;
