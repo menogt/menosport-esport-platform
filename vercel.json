@@ -4,7 +4,7 @@
   "buildCommand": "pnpm build",
   "builds": [
     {
-      "src": "api/trpc/[...path].ts",
+      "src": "api/**/*.ts",
       "use": "@vercel/node",
       "config": {
         "includeFiles": ["server/**", "drizzle/**", "shared/**"]
