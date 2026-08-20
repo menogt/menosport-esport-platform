@@ -34,9 +34,14 @@ export default function LoginPage() {
       return;
     }
 
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) {
+      toast.error("Your session was not persisted. Please try signing in again.");
+      return;
+    }
+
     toast.success("Welcome back to Meno Arena.");
     navigate("/dashboard/player");
-    window.location.reload();
   }
 
   return (

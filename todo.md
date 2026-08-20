@@ -2732,3 +2732,10 @@
 - [x] Fix the smallest client/server session persistence defect
 - [x] Add regression coverage for protected-session hydration and dashboard navigation
 - [ ] Rebuild and verify the deployed sign-in no longer returns to the auth gate
+
+## Production auth loop — second investigation
+
+- [ ] Capture the deployed `/api/trpc/auth.me` response and browser network path after Supabase sign-in
+- [ ] Confirm the promoted Vercel build contains the auth-loop fix commit
+- [x] Apply the evidence-based production auth patch, if needed
+- [ ] Re-run tests/build and verify the protected dashboard no longer shows the auth gate
