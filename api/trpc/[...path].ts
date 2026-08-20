@@ -1,5 +1,3 @@
-import { createVercelApiApp } from "../../server/_core/app";
-
 type VercelResponse = {
   statusCode: number;
   setHeader(name: string, value: string): void;
@@ -10,11 +8,12 @@ type VercelRequest = {
   url?: string;
 };
 
-let app: ReturnType<typeof createVercelApiApp> | undefined;
+let appPromise: Promise<any> | undefined;
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    app ??= createVercelApiApp();
+    appPromise ??= import("../../server/_core/app").then(module => module.createVercelApiApp());
+    const app = await appPromise;
     const originalUrl = req.url ?? "/";
     req.url = originalUrl.replace(/^\/api\/trpc/, "") || "/";
     return app(req as never, res as never);
