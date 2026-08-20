@@ -1,5 +1,5 @@
 import { and, desc, eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import type { MySql2Database } from "drizzle-orm/mysql2";
 import {
   InsertUser,
   clanMembers,
@@ -19,13 +19,14 @@ import { ENV } from "./_core/env";
 import { hasSupabaseDomainClient, supabaseAdmin } from "./_core/supabaseAdmin";
 import { supabaseCreateClan, supabaseCreateTeam, supabaseCreateTournament, supabaseGetClanDashboard, supabaseGetPlayerDashboard, supabaseGetClansForUser, supabaseGetOpenDisputes, supabaseGetTeamsForUser, supabaseGetTournament, supabaseGetTournamentMatches, supabaseOpenDispute, supabaseResolveDispute, supabaseSubmitMatchReport, supabaseUpdatePlayerProfile } from "./supabaseDomain";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+let _db: MySql2Database<any> | null = null;
 const isVitestRuntime = process.env.NODE_ENV === "test" || Boolean(process.env.VITEST_WORKER_ID) || process.argv.some(argument => argument.includes("vitest"));
 const shouldUseSupabaseDomain = () => !isVitestRuntime && hasSupabaseDomainClient();
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
+      const { drizzle } = await import("drizzle-orm/mysql2");
       _db = drizzle(process.env.DATABASE_URL);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);

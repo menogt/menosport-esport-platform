@@ -2813,5 +2813,5 @@
 - [x] Isolate Vercel `FUNCTION_INVOCATION_FAILED` with live module probes: Express imports, while router/context imports crash.
 - [x] Guard Supabase client construction against malformed or missing deployment environment values.
 - [x] Add regression coverage for invalid Supabase server URL handling.
-- [ ] Remove temporary Vercel module probes and push the production fix to GitHub main.
+- [x] Remove temporary Vercel module probes and push the production fix to GitHub main.
 - [ ] Verify the promoted live `/api/trpc/auth.me` response after the production deployment.
