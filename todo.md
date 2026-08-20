@@ -2819,3 +2819,5 @@
 - [x] Investigate the Vercel production override and root-directory/build-settings discrepancy shown in the user screenshot: production overrides match the repository; project defaults were corrected by the user.
 
 - [x] Diagnose and fix the remaining live Supabase login/session handoff failure after Vercel build settings were corrected: auth.me now waits for Supabase session restoration and refreshes on auth-state changes; TypeScript, 28 Vitest tests, and production build pass.
+
+- [x] Diagnose and fix the Vite HMR failures affecting `index.css`, `DashboardLayout`, and protected route modules in the development preview: an incomplete Git synchronization left conflict markers in `server/routers.ts`; the source tree is now clean, the dev server was restarted, and a stylesheet HMR update completed successfully.
