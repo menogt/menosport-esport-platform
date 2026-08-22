@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import ParallaxHeroArt from "@/components/ParallaxHeroArt";
 import ParallaxGameCard from "@/components/ParallaxGameCard";
 import { ScrollReveal, ShimmerLine } from "@/components/VisualEffects";
+import ArenaMotionDirector from "@/components/ArenaMotionDirector";
 
 const tournaments = [
   {
@@ -118,20 +119,21 @@ function Header() {
 function Hero() {
   return (
     <section className="hero-section">
+      <ArenaMotionDirector />
       <div className="hero-grid" />
       <div className="hero-scanline" />
       <div className="hero-orb hero-orb--one" />
       <div className="hero-orb hero-orb--two" />
       <div className="hero-content page-shell">
-        <div className="hero-copy">
-          <div className="eyebrow"><span className="eyebrow-dot" /> The competitive layer for everyone</div>
-          <h1>Play with<br /><em>intent.</em></h1>
-          <p className="hero-lede">Meno Arena is where organized competition meets the people who make it matter. Find your next bracket, build a real team, and leave a mark.</p>
-          <div className="hero-actions">
+          <div className="hero-copy">
+          <div data-hero-intro className="eyebrow"><span className="eyebrow-dot" /> The competitive layer for everyone</div>
+          <h1 data-hero-intro>Play with<br /><em>intent.</em></h1>
+          <p data-hero-intro className="hero-lede">Meno Arena is where organized competition meets the people who make it matter. Find your next bracket, build a real team, and leave a mark.</p>
+          <div data-hero-intro className="hero-actions">
             <Button className="button-primary" asChild><a href="#tournaments">Explore tournaments <ArrowUpRight size={16} /></a></Button>
             <Button className="button-quiet" variant="ghost" asChild><a href="#how-it-works">How it works <ChevronRight size={16} /></a></Button>
           </div>
-          <div className="hero-proof"><div className="avatar-stack"><span>JF</span><span>RK</span><span>LM</span><span>+</span></div><span><strong>18,620</strong> competitors already in the arena</span></div>
+          <div data-hero-intro className="hero-proof"><div className="avatar-stack"><span>JF</span><span>RK</span><span>LM</span><span>+</span></div><span><strong>18,620</strong> competitors already in the arena</span></div>
         </div>
         <ParallaxHeroArt />
       </div>
@@ -141,7 +143,8 @@ function Hero() {
 }
 
 function LiveTicker() {
-  return <div className="live-ticker"><div className="page-shell live-ticker__inner"><div className="live-ticker__label"><CircleDot size={13} /> Live now</div><div className="ticker-items">{liveMatches.map((match) => <div className="ticker-match" key={match.a}><span>{match.game}</span><strong>{match.a}</strong><b>{match.score}</b><strong>{match.b}</strong></div>)}</div><Link href="/tournaments/live" className="ticker-link">View all <ArrowUpRight size={14} /></Link></div></div>;
+  const tickers = [...liveMatches, ...liveMatches];
+  return <div className="live-ticker"><div className="page-shell live-ticker__inner"><div className="live-ticker__label"><CircleDot size={13} /> Live now</div><div className="ticker-viewport"><div className="ticker-items">{tickers.map((match, index) => <div className="ticker-match" key={`${match.a}-${index}`}><span>{match.game}</span><strong>{match.a}</strong><b>{match.score}</b><strong>{match.b}</strong></div>)}</div></div><Link href="/tournaments/live" className="ticker-link">View all <ArrowUpRight size={14} /></Link></div></div>;
 }
 
 function TournamentSection() {

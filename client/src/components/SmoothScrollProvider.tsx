@@ -1,5 +1,9 @@
 import { useEffect, type PropsWithChildren } from "react";
 import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function SmoothScrollProvider({ children }: PropsWithChildren) {
   useEffect(() => {
@@ -29,6 +33,7 @@ export default function SmoothScrollProvider({ children }: PropsWithChildren) {
       root.style.setProperty("--scroll-progress", progress.toFixed(4));
       root.style.setProperty("--scroll-velocity", velocity.toFixed(4));
       root.style.setProperty("--scroll-direction", String(direction));
+      ScrollTrigger.update();
     };
 
     lenis.on("scroll", handleScroll);
@@ -41,11 +46,17 @@ export default function SmoothScrollProvider({ children }: PropsWithChildren) {
     };
 
     frameId = window.requestAnimationFrame(raf);
+    const refreshScrollTrigger = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refreshScrollTrigger, { once: true });
+    document.fonts?.ready.then(refreshScrollTrigger).catch(() => undefined);
+    window.setTimeout(refreshScrollTrigger, 120);
 
     return () => {
       window.cancelAnimationFrame(frameId);
       lenis.off("scroll", handleScroll);
       lenis.destroy();
+      ScrollTrigger.refresh();
+      window.removeEventListener("load", refreshScrollTrigger);
       delete root.dataset.motion;
       root.style.removeProperty("--scroll-progress");
       root.style.removeProperty("--scroll-velocity");

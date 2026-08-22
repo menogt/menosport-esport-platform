@@ -2838,3 +2838,12 @@
 - [x] Add filterable media categories and an accessible full-screen gallery viewer.
 - [x] Repair genuinely broken user-facing controls or provide explicit availability feedback for provider-dependent actions.
 - [x] Add regression tests, verify desktop/mobile interaction flows, production build, and checkpoint the changes: 32 Vitest tests, TypeScript, production build, desktop/mobile review, live HMR updates, and a clean source-marker scan pass.
+
+- [x] Diagnose why live `/clans` and `/media` do not load their preview equivalents and compare the production deployment with GitHub main: the live domain was serving GitHub `main` before the locally validated visual-route commits were pushed.
+- [x] Audit all public navigation routes against the live domain for equivalent deployed-versus-preview failures.
+- [x] Apply and sync the minimal production routing/deployment fix to GitHub main: cherry-picked and pushed the validated feature commits onto the current GitHub `main` without overwriting newer remote history.
+- [x] Verify all audited public routes on the promoted live deployment before checkpointing: homepage, live room, games, clans, media, clan profile, match room, sponsors, store, admin, profile, and dashboard routes all return HTTP 200; live clan and media interactions were rendered and exercised.
+
+- [x] Audit the current animation and scroll systems across Meno Arena’s public surfaces.
+- [x] Define and implement a cohesive motion language for hero, navigation, live signals, cards, and scroll depth.
+- [x] Add reduced-motion-safe behavior and validate desktop/mobile performance and interaction quality: 34 Vitest tests, TypeScript, production build, desktop/mobile motion review, and current-log inspection pass; only historical errors remain in retained logs.
