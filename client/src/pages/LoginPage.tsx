@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 
 export default function LoginPage({ initialMode }: { initialMode?: "signin" | "signup" } = {}) {
   const [location, navigate] = useLocation();
@@ -49,13 +49,13 @@ export default function LoginPage({ initialMode }: { initialMode?: "signin" | "s
       <div className="grid min-h-[100dvh] lg:grid-cols-[1.1fr_0.9fr]">
         <section className="relative hidden overflow-hidden border-r border-white/10 px-12 py-12 lg:flex lg:flex-col lg:justify-between">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_20%,rgba(183,255,58,0.18),transparent_35%),linear-gradient(135deg,#10170d_0%,#070907_58%)]" />
-          <div className="relative flex items-center gap-3">
+          <Link href="/" className="relative flex items-center gap-3" aria-label="Meno Arena home">
             <span className="grid h-11 w-11 place-items-center rounded-2xl bg-lime-300 font-black text-black">M</span>
             <div>
               <p className="text-xs font-black tracking-[0.24em]">MENO ARENA</p>
               <p className="mt-1 text-[10px] tracking-[0.2em] text-white/40">PLAYER NETWORK</p>
             </div>
-          </div>
+          </Link>
           <div className="relative max-w-xl">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-lime-300">The room is live</p>
             <h1 className="text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white xl:text-7xl">Your next series starts here.</h1>
@@ -67,10 +67,10 @@ export default function LoginPage({ initialMode }: { initialMode?: "signin" | "s
         <section className="flex items-center px-6 py-10 sm:px-10 lg:px-16">
           <div className="mx-auto w-full max-w-md">
             <div className="mb-10 lg:hidden">
-              <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-3" aria-label="Meno Arena home">
                 <span className="grid h-10 w-10 place-items-center rounded-2xl bg-lime-300 font-black text-black">M</span>
                 <span className="text-xs font-black tracking-[0.24em]">MENO ARENA</span>
-              </div>
+              </Link>
             </div>
             <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-lime-300">Secure access</p>

@@ -33,7 +33,7 @@ import {
   ChartNoAxesCombined,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "./DashboardLayoutSkeleton";
 import { Button } from "./ui/button";
 
@@ -68,10 +68,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="min-h-screen bg-[#070907] text-white flex items-center justify-center px-6">
         <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 shadow-2xl shadow-lime-950/20">
-          <div className="mb-8 flex items-center gap-3 text-lime-300">
+          <Link href="/" className="mb-8 flex items-center gap-3 text-lime-300" aria-label="Meno Arena home">
             <span className="grid h-10 w-10 place-items-center rounded-2xl bg-lime-300 text-[#080b08] font-black">M</span>
             <span className="font-black tracking-[0.2em] text-xs">MENO ARENA / AUTH</span>
-          </div>
+          </Link>
           <h1 className="text-3xl font-semibold tracking-tight">Your competitive command center.</h1>
           <p className="mt-3 text-sm leading-6 text-white/55">Sign in to manage your roster, review match windows, and move through the live circuit.</p>
           <Button onClick={() => { window.location.href = "/login"; }} className="mt-8 h-12 w-full rounded-xl bg-lime-300 text-black hover:bg-lime-200">Continue with Supabase</Button>
@@ -134,7 +134,7 @@ function DashboardLayoutContent({ children, setSidebarWidth }: DashboardLayoutCo
               <button onClick={toggleSidebar} aria-label="Toggle navigation" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-lime-300 text-[#080b08] shadow-[0_0_24px_rgba(190,242,100,0.18)]">
                 <PanelLeft className="h-4 w-4" />
               </button>
-              {!isCollapsed && <div className="min-w-0"><p className="truncate text-sm font-black tracking-[0.18em] text-white">MENO ARENA</p><p className="mt-0.5 text-[10px] uppercase tracking-[0.22em] text-white/35">Player network</p></div>}
+              {!isCollapsed && <Link href="/" className="min-w-0" aria-label="Meno Arena home"><p className="truncate text-sm font-black tracking-[0.18em] text-white hover:text-lime-300">MENO ARENA</p><p className="mt-0.5 text-[10px] uppercase tracking-[0.22em] text-white/35">Player network</p></Link>}
             </div>
           </SidebarHeader>
           <SidebarContent className="gap-0 px-2 py-5">
