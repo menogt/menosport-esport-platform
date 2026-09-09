@@ -16,10 +16,11 @@ const normalizeRegion = (region: string | null | undefined) => (clean(region)?.t
 const teamHref = (teamId: number) => `/teams/${teamId}`;
 
 /** Normalises a legacy (drizzle / in-memory) team row into the platform TeamRow shape. */
-export function legacyTeamRow(team: { id: number; ownerId: number; name: string; tag: string; game: string; region?: string | null; description?: string | null; createdAt?: Date; updatedAt?: Date }): TeamRow {
+export function legacyTeamRow(team: Record<string, any>): TeamRow {
   return {
-    id: team.id, ownerId: team.ownerId, captainId: team.ownerId, name: team.name, tag: team.tag, game: team.game, region: team.region ?? null, description: team.description ?? null,
-    logoUrl: null, bannerUrl: null, socials: {}, lineupLockedAt: null, wins: 0, losses: 0, createdAt: team.createdAt ?? new Date(), updatedAt: team.updatedAt ?? new Date(),
+    id: Number(team.id), ownerId: Number(team.ownerId), captainId: Number(team.captainId ?? team.ownerId), name: String(team.name ?? ""), tag: String(team.tag ?? ""), game: String(team.game ?? ""),
+    region: team.region ?? null, description: team.description ?? null, logoUrl: team.logoUrl ?? null, bannerUrl: team.bannerUrl ?? null, socials: team.socials ?? {}, lineupLockedAt: team.lineupLockedAt ?? null,
+    wins: Number(team.wins ?? 0), losses: Number(team.losses ?? 0), createdAt: team.createdAt ? new Date(team.createdAt) : new Date(), updatedAt: team.updatedAt ? new Date(team.updatedAt) : new Date(),
   };
 }
 

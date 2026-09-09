@@ -7,6 +7,7 @@ import {
 } from "./lookups";
 import { notify } from "./notifications";
 import { fallbackAchievements, fallbackClans, fallbackSponsors, fallbackTeamRoster, fallbackTeams, fallbackUsers } from "./seed";
+import { legacyTeamRow } from "./teams";
 import { createClanForUser, getClanDashboard, getClansForUser } from "../db";
 
 export type SocialLinks = { twitter?: string; instagram?: string; youtube?: string; tiktok?: string; discord?: string };
@@ -17,10 +18,11 @@ const normalizeRegion = (region: string | null | undefined) => (clean(region)?.t
 const clanHref = (clanId: number) => `/clans/${clanId}`;
 
 /** Normalises a legacy (drizzle / in-memory) clan row into the platform ClanRow shape. */
-function legacyClanRow(clan: { id: number; ownerId: number; name: string; tag: string; region?: string | null; bio?: string | null; foundedYear?: number | null; socials?: string | null; createdAt?: Date; updatedAt?: Date }): ClanRow {
+function legacyClanRow(clan: Record<string, any>): ClanRow {
   return {
-    id: clan.id, ownerId: clan.ownerId, name: clan.name, tag: clan.tag, region: clan.region ?? null, bio: clan.bio ?? null, foundedYear: clan.foundedYear ?? null, socials: clan.socials ?? null,
-    socialLinks: {}, logoUrl: null, bannerUrl: null, verified: false, followerCount: 0, prizeEarningsCents: 0, trophies: 0, createdAt: clan.createdAt ?? new Date(), updatedAt: clan.updatedAt ?? new Date(),
+    id: Number(clan.id), ownerId: Number(clan.ownerId), name: String(clan.name ?? ""), tag: String(clan.tag ?? ""), region: clan.region ?? null, bio: clan.bio ?? null, foundedYear: clan.foundedYear ?? null, socials: clan.socials ?? null,
+    socialLinks: clan.socialLinks ?? {}, logoUrl: clan.logoUrl ?? null, bannerUrl: clan.bannerUrl ?? null, verified: Boolean(clan.verified), followerCount: Number(clan.followerCount ?? 0), prizeEarningsCents: Number(clan.prizeEarningsCents ?? 0), trophies: Number(clan.trophies ?? 0),
+    createdAt: clan.createdAt ? new Date(clan.createdAt) : new Date(), updatedAt: clan.updatedAt ? new Date(clan.updatedAt) : new Date(),
   };
 }
 
@@ -255,16 +257,20 @@ function getClanFallback(input: { clanId?: number; tag?: string }, viewer: Viewe
 export async function clanDashboard(viewer: Viewer, clanId: number) {
   if (!hasDb()) {
     const legacy = await getClanDashboard(clanId, viewer.id);
+    if (!legacy.clan) notFound("Clan");
+    const row = legacyClanRow(legacy.clan);
+    const teams = legacy.teams.map(team => teamMini(legacyTeamRow(team), 1));
     return {
-      ...legacy,
-      teams: legacy.teams.map(team => ({ ...team, gameSlug: gameSlugFor(team.game), logoUrl: null, memberCount: 1, wins: 0, losses: 0 })),
-      members: [] as Array<{ userId: number; name: string; handle: string | null; role: ClanRole }>,
-      pendingInvites: [] as Array<Record<string, unknown>>,
-      achievements: [] as Array<Record<string, unknown>>,
+      clan: presentClan(row),
+      teams,
+      members: [] as Array<{ userId: number; name: string; handle: string | null; avatarUrl: string | null; role: ClanRole; joinedAt: Date }>,
+      pendingInvites: [] as Awaited<ReturnType<typeof decorateClanInvites>>,
+      achievements: [] as Array<Record<string, any>>,
       followerCount: 0,
-      sponsors: [] as Array<Record<string, unknown>>,
-      stats: { wins: 0, losses: 0, winRate: 0, prizeEarningsCents: 0, trophies: 0 },
-      myRole: "owner" as ClanRole,
+      sponsors: [] as Array<Record<string, any>>,
+      stats: statsFor(row, teams),
+      myRole: "owner" as ClanRole | null,
+      viewer: { canManage: true, isOwner: true },
     };
   }
   const access = await clanAccess(clanId, viewer);

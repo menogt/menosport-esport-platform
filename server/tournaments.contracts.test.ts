@@ -165,6 +165,19 @@ describe("matches without a database", () => {
     await expect(publicCaller.matches.byId({ matchId: 999_999 })).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
+  it("keeps the legacy tournament creation and dispute resolution shapes working", async () => {
+    const caller = appRouter.createCaller(context(user()));
+    const tournament = await caller.tournaments.create({ name: "Phase 2 Success Cup", game: "VALORANT", format: "single_elimination", startsAt: new Date("2026-10-01T18:00:00Z"), prizePoolCents: 50_000, maxTeams: 16, streamUrl: "https://twitch.tv/menoarena", clanEligible: true });
+    expect(tournament).toMatchObject({ name: "Phase 2 Success Cup", game: "VALORANT", status: "registration", maxTeams: 16 });
+    // The create page submits an empty stream URL when the field is left blank.
+    await expect(caller.tournaments.create({ name: "Blank stream", game: "Valorant", format: "swiss", startsAt: new Date("2026-10-02T18:00:00Z"), streamUrl: "" })).resolves.toMatchObject({ name: "Blank stream" });
+
+    const admin = appRouter.createCaller(context(user("admin", 1)));
+    expect(await admin.matches.disputes.open()).toEqual([]);
+    const resolved = await admin.matches.disputes.resolve({ disputeId: 5, winnerTeamId: 201, adminDecision: "Evidence reviewed and result confirmed." });
+    expect(resolved).toMatchObject({ status: "resolved", winnerTeamId: 201 });
+  });
+
   it("keeps the legacy reporting and dispute shapes working", async () => {
     const caller = appRouter.createCaller(context(user()));
     const report = await caller.matches.report({ matchId: 301, teamId: 201, scoreFor: 2, scoreAgainst: 1 });

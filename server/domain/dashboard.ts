@@ -2,7 +2,7 @@ import { gameSlugFor } from "@shared/games";
 import { camel, camelRows, clean, db, fail, hasDb } from "./_shared";
 import { clanLinksForTeams, clansById, teamsById, tournamentsById, uniqueIds, winRate, type ClanSummary, type Viewer } from "./lookups";
 import { listNotifications, unreadCount } from "./notifications";
-import { listMyTeamsDb } from "./teams";
+import { legacyTeamRow, listMyTeamsDb, presentTeam, type MyTeam, type MyTeamRole } from "./teams";
 import { getPlayerDashboard, updatePlayerProfile } from "../db";
 
 export type ProfileSocials = { twitter?: string; instagram?: string; youtube?: string; tiktok?: string; discord?: string };
@@ -27,7 +27,7 @@ async function fallbackDashboard(viewer: Viewer) {
     ...legacy,
     profile: { ...profile, avatarUrl: profile.avatarUrl ?? null, bannerUrl: profile.bannerUrl ?? null, socials: profile.socials ?? {} },
     stats: { wins, losses, winRate: winRate(wins, losses), formStreak: wins ? "W2" : "—", tournamentsPlayed: legacy.tournaments.length, titles: 0 },
-    teams: legacy.teams.map(team => ({ ...team, gameSlug: gameSlugFor(team.game), myRole: "owner" as const, clan: null as ClanSummary | null, memberCount: 1, logoUrl: null, lineupLockedAt: null })),
+    teams: legacy.teams.map(team => ({ ...presentTeam(legacyTeamRow(team), { memberCount: 1 }), myRole: "owner" as MyTeamRole })) as MyTeam[],
     clan: legacy.clan ? { id: 0, name: legacy.clan.name, tag: legacy.clan.tag, verified: false, logoUrl: null, myRole: "owner" } : null,
     registrations: [] as Array<Record<string, unknown>>,
     upcomingMatches: [] as Array<Record<string, unknown>>,
