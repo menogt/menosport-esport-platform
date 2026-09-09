@@ -1,32 +1,26 @@
-import { z } from "zod";
-import { TRPCError } from "@trpc/server";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
-import {
-  createClanForUser,
-  createTeamForUser,
-  createTournamentForUser,
-  getClanDashboard,
-  getClansForUser,
-  getPlayerDashboard,
-  getTeamsForUser,
-  getOpenDisputes,
-  openMatchDispute,
-  resolveMatchDispute,
-  submitMatchReport,
-  updatePlayerProfile,
-  getTournamentById,
-  getTournamentMatches,
-} from "./db";
-import { getPhase4Hub, getSponsorCampaigns, getStoreProducts } from "./phase4";
+import { publicProcedure, router } from "./_core/trpc";
+import { adminRouter } from "./routers/admin";
+import { analyticsRouter } from "./routers/analytics";
+import { clansRouter } from "./routers/clans";
+import { communityRouter, sponsorsRouter, storeRouter } from "./routers/commerce";
+import { dashboardRouter } from "./routers/dashboard";
+import { gamesRouter } from "./routers/games";
+import { matchesRouter } from "./routers/matches";
+import { mediaRouter } from "./routers/media";
+import { notificationsRouter } from "./routers/notifications";
+import { paymentsRouter } from "./routers/payments";
+import { prizesRouter } from "./routers/prizes";
+import { storageRouter } from "./routers/storage";
+import { teamsRouter } from "./routers/teams";
+import { tournamentsRouter } from "./routers/tournaments";
 
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required." });
-  return next({ ctx });
-});
-
+/**
+ * Root tRPC router. Feature routers live in server/routers/* and their
+ * persistence in server/domain/* (Supabase service-role client).
+ */
 export const appRouter = router({
   system: systemRouter,
   auth: router({
@@ -37,90 +31,22 @@ export const appRouter = router({
       return { success: true } as const;
     }),
   }),
-  dashboard: router({
-    player: protectedProcedure.query(({ ctx }) => getPlayerDashboard(ctx.user.id)),
-    updateProfile: protectedProcedure
-      .input(z.object({ handle: z.string().min(2).max(48), bio: z.string().max(500).optional(), region: z.string().max(64).optional(), primaryGame: z.string().max(64).optional() }))
-      .mutation(({ ctx, input }) => updatePlayerProfile({ ...input, userId: ctx.user.id })),
-  }),
-  clans: router({
-    mine: protectedProcedure.query(({ ctx }) => getClansForUser(ctx.user.id)),
-    dashboard: protectedProcedure
-      .input(z.object({ clanId: z.number().int().positive() }))
-      .query(({ ctx, input }) => getClanDashboard(input.clanId, ctx.user.id)),
-    create: protectedProcedure
-      .input(z.object({
-        name: z.string().min(2).max(80),
-        tag: z.string().min(2).max(12),
-        region: z.string().max(64).optional(),
-        bio: z.string().max(500).optional(),
-        foundedYear: z.number().int().min(1900).max(2100).optional(),
-        socials: z.string().max(500).optional(),
-      }))
-      .mutation(({ ctx, input }) => createClanForUser({ ...input, ownerId: ctx.user.id })),
-  }),
-  teams: router({
-    mine: protectedProcedure.query(({ ctx }) => getTeamsForUser(ctx.user.id)),
-    create: protectedProcedure
-      .input(z.object({
-        name: z.string().min(2).max(80),
-        tag: z.string().min(2).max(12),
-        game: z.string().min(2).max(64),
-        region: z.string().max(64).optional(),
-        description: z.string().max(500).optional(),
-      }))
-      .mutation(({ ctx, input }) => createTeamForUser({ ...input, ownerId: ctx.user.id })),
-  }),
-  tournaments: router({
-    create: protectedProcedure
-      .input(z.object({
-        name: z.string().min(3).max(120),
-        game: z.string().min(2).max(64),
-        format: z.enum(["single_elimination", "double_elimination", "round_robin", "swiss"]),
-        startsAt: z.coerce.date(),
-        registrationClosesAt: z.coerce.date().optional(),
-        prizePoolCents: z.number().int().min(0).max(100000000).optional(),
-        entryFeeCents: z.number().int().min(0).max(10000000).optional(),
-        maxTeams: z.number().int().min(2).max(256).optional(),
-        rules: z.string().max(5000).optional(),
-        sponsorName: z.string().max(120).optional(),
-        streamUrl: z.string().url().max(500).optional().or(z.literal("")),
-        clanEligible: z.boolean().optional(),
-      }))
-      .mutation(({ ctx, input }) => createTournamentForUser({ ...input, createdBy: ctx.user.id })),
-    byId: protectedProcedure
-      .input(z.object({ tournamentId: z.number().int().positive() }))
-      .query(({ input }) => getTournamentById(input.tournamentId)),
-  }),
-  matches: router({
-    report: protectedProcedure
-      .input(z.object({ matchId: z.number().int().positive(), teamId: z.number().int().positive(), scoreFor: z.number().int().min(0).max(99), scoreAgainst: z.number().int().min(0).max(99), screenshotUrl: z.string().url().max(500).optional().or(z.literal("")), notes: z.string().max(1000).optional() }))
-      .mutation(({ ctx, input }) => submitMatchReport({ ...input, submittedBy: ctx.user.id })),
-    openDispute: protectedProcedure
-      .input(z.object({ matchId: z.number().int().positive(), reason: z.string().min(10).max(1000) }))
-      .mutation(({ ctx, input }) => openMatchDispute({ ...input, openedBy: ctx.user.id })),
-    disputes: router({
-      open: adminProcedure.query(() => getOpenDisputes()),
-      resolve: adminProcedure
-        .input(z.object({ disputeId: z.number().int().positive(), winnerTeamId: z.number().int().positive(), adminDecision: z.string().min(10).max(1000) }))
-        .mutation(({ ctx, input }) => resolveMatchDispute({ ...input, resolvedBy: ctx.user.id })),
-    }),
-    matches: protectedProcedure
-      .input(z.object({ tournamentId: z.number().int().positive() }))
-      .query(({ input }) => getTournamentMatches(input.tournamentId)),
-  }),
-  community: router({
-    hub: publicProcedure.query(() => ({ integrations: getPhase4Hub().integrations, streamSchedule: getPhase4Hub().streamSchedule })),
-  }),
-  sponsors: router({
-    featured: publicProcedure.query(() => getSponsorCampaigns()),
-  }),
-  store: router({
-    catalog: publicProcedure.query(() => getStoreProducts()),
-  }),
-  analytics: router({
-    overview: publicProcedure.query(() => getPhase4Hub().analytics),
-  }),
+  dashboard: dashboardRouter,
+  clans: clansRouter,
+  teams: teamsRouter,
+  tournaments: tournamentsRouter,
+  matches: matchesRouter,
+  prizes: prizesRouter,
+  payments: paymentsRouter,
+  games: gamesRouter,
+  notifications: notificationsRouter,
+  media: mediaRouter,
+  storage: storageRouter,
+  community: communityRouter,
+  sponsors: sponsorsRouter,
+  store: storeRouter,
+  analytics: analyticsRouter,
+  admin: adminRouter,
 });
 
 export type AppRouter = typeof appRouter;

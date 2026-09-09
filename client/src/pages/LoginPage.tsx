@@ -6,9 +6,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
 
-export default function LoginPage() {
-  const [, navigate] = useLocation();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+export default function LoginPage({ initialMode }: { initialMode?: "signin" | "signup" } = {}) {
+  const [location, navigate] = useLocation();
+  const [mode, setMode] = useState<"signin" | "signup">(initialMode ?? (location === "/register" ? "signup" : "signin"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);

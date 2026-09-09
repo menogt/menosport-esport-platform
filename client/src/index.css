@@ -2,6 +2,21 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Tailwind v4 theme tokens: enables `font-display`, `font-mono`, `bg-arena-*`, `text-arena-*` utilities. */
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "DM Mono", monospace;
+  --font-sans: "Manrope", sans-serif;
+  --color-arena-bg: #0b0d0e;
+  --color-arena-panel: #111516;
+  --color-arena-panel-2: #15191a;
+  --color-arena-lime: #d8ff62;
+  --color-arena-blue: #89c7ff;
+  --color-arena-orange: #ffab78;
+  --color-arena-violet: #c4a8ff;
+  --color-arena-muted: #8f9691;
+}
+
 :root {
   font-family: "Manrope", sans-serif;
   color: #e9ebe6;
