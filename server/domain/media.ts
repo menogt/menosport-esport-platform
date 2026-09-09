@@ -130,5 +130,3 @@ export async function removeMedia(viewer: Viewer, mediaId: number) {
   return { success: true as const };
 }
 
-export const mediaSearchTerm = (value: string) => safeFilter(value);
-export const presentMediaRow = (row: Record<string, any>) => camel<MediaRow>(row);
