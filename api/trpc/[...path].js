@@ -271,7 +271,7 @@ var ENV = {
 
 // server/_core/supabaseAdmin.ts
 import { createClient } from "@supabase/supabase-js";
-var url = process.env.VITE_SUPABASE_URL ?? "";
+var url = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
 var serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 function createOptionalSupabaseAdmin(urlValue, key) {
   if (!urlValue || !key) {
@@ -1365,8 +1365,8 @@ var appRouter = router({
 
 // server/_core/supabase.ts
 import { createClient as createClient2 } from "@supabase/supabase-js";
-var supabaseUrl = process.env.VITE_SUPABASE_URL ?? "";
-var supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? "";
+var supabaseUrl = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
+var supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY ?? "";
 function createOptionalSupabaseClient(url2, key) {
   if (!url2 || !key) return null;
   try {
@@ -1380,20 +1380,61 @@ function createOptionalSupabaseClient(url2, key) {
   }
 }
 var supabase = createOptionalSupabaseClient(supabaseUrl, supabaseAnonKey);
-async function authenticateSupabaseToken(token) {
-  if (!supabase || !token) return null;
-  const { data, error } = await supabase.auth.getUser(token);
-  if (error || !data.user) return null;
-  const authUser = data.user;
-  const openId = `supabase:${authUser.id}`;
-  await upsertUser({
+function displayName(authUser) {
+  return authUser.user_metadata?.full_name ?? authUser.user_metadata?.name ?? authUser.email ?? "Meno Arena player";
+}
+function fallbackUserId(supabaseUserId) {
+  let hash = 2166136261;
+  for (let index = 0; index < supabaseUserId.length; index++) {
+    hash ^= supabaseUserId.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 1 || 1;
+}
+function buildFallbackUser(authUser, openId, now = /* @__PURE__ */ new Date()) {
+  return {
+    id: fallbackUserId(authUser.id),
     openId,
-    name: authUser.user_metadata?.full_name ?? authUser.user_metadata?.name ?? authUser.email ?? "Meno Arena player",
+    name: displayName(authUser),
     email: authUser.email ?? null,
     loginMethod: "supabase",
-    lastSignedIn: /* @__PURE__ */ new Date()
-  });
-  return await getUserByOpenId(openId) ?? null;
+    role: "user",
+    createdAt: authUser.created_at ? new Date(authUser.created_at) : now,
+    updatedAt: now,
+    lastSignedIn: now
+  };
+}
+async function authenticateSupabaseToken(token) {
+  if (!token) return null;
+  if (!supabase) {
+    console.error(
+      "[Supabase] Cannot verify bearer token: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the server environment"
+    );
+    return null;
+  }
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data.user) {
+    if (error) console.warn("[Supabase] Bearer token rejected:", error.message);
+    return null;
+  }
+  const authUser = data.user;
+  const openId = `supabase:${authUser.id}`;
+  const now = /* @__PURE__ */ new Date();
+  try {
+    await upsertUser({
+      openId,
+      name: displayName(authUser),
+      email: authUser.email ?? null,
+      loginMethod: "supabase",
+      lastSignedIn: now
+    });
+    const stored = await getUserByOpenId(openId);
+    if (stored) return stored;
+    console.warn("[Supabase] Authenticated user was not persisted (no database configured); using session-only user");
+  } catch (persistError) {
+    console.error("[Supabase] Failed to persist authenticated user; using session-only user", persistError);
+  }
+  return buildFallbackUser(authUser, openId, now);
 }
 
 // server/_core/context.ts
@@ -1401,11 +1442,20 @@ async function createContext(opts) {
   let user = null;
   const authorization = opts.req.headers.authorization;
   const bearerToken = authorization?.startsWith("Bearer ") ? authorization.slice("Bearer ".length) : null;
-  try {
-    user = bearerToken ? await authenticateSupabaseToken(bearerToken) : null;
-    if (!user) user = await sdk.authenticateRequest(opts.req);
-  } catch (error) {
-    user = null;
+  if (bearerToken) {
+    try {
+      user = await authenticateSupabaseToken(bearerToken);
+    } catch (error) {
+      console.error("[Auth] Supabase bearer authentication failed", error);
+      user = null;
+    }
+  }
+  if (!user) {
+    try {
+      user = await sdk.authenticateRequest(opts.req);
+    } catch (error) {
+      user = null;
+    }
   }
   return {
     req: opts.req,
